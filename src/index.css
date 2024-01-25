@@ -1,0 +1,14 @@
+:root {
+  --black: #18181b;
+  --red-light: #f87171;
+  --red-normal: #ef4444;
+  --red-medium: #dc2626;
+  --red-dark: #b91c1c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
