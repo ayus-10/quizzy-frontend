@@ -1,8 +1,11 @@
 import styles from "../styles/Button.module.css";
 
-function Button({ text }: { text: string }) {
+type ButtonProps = { text: string; action?: () => void };
+
+function Button(props: ButtonProps) {
+  const { text, action } = props;
   return (
-    <div className={styles.button_parent}>
+    <div className={styles.button_parent} onClick={action}>
       <button className={styles.button}>{text}</button>
     </div>
   );
