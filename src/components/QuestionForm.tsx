@@ -1,21 +1,27 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  ChangeEvent,
+  FormEvent,
+  useRef,
+  useState,
+} from "react";
 import Button from "./Button";
 import styles from "../styles/QuestionForm.module.css";
+import type { questionItemType } from "../routes/Create";
 
-type questionItemType = {
-  questionText: string;
-  answers: {
-    answerText: string;
-    isCorrect: boolean;
-  }[];
+type QuestionFormProps = {
+  questionNumber: number;
+  setQuestionItem: Dispatch<SetStateAction<questionItemType>>;
+  emptyQuestionItem: questionItemType;
 };
 
-type actionType = "Save" | "Update" | "✓";
+type actionType = "Save" | "Update" | "FaCheck";
 
-function QuestionForm({ questionNumber }: { questionNumber: number }) {
+function QuestionForm(props: QuestionFormProps) {
+  const { questionNumber, setQuestionItem, emptyQuestionItem } = props;
+
   const [action, setAction] = useState<actionType>("Save");
-
-  const [questionItem, setQuestionItem] = useState<questionItemType>();
 
   const questionRef = useRef(""); // Used to store question text
   const choiceRef = useRef(0); // Used to store correct choice number
@@ -24,16 +30,8 @@ function QuestionForm({ questionNumber }: { questionNumber: number }) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); // Prevent reload
 
-    // Create an empty object that will be set to the questionItem state
-    const questionItem: questionItemType = {
-      questionText: "",
-      answers: [
-        {
-          answerText: "",
-          isCorrect: false,
-        },
-      ],
-    };
+    // Set questionItem state to an empty object
+    const questionItem = emptyQuestionItem;
 
     // Create an empty array that will be set to the answers key of previous object
     const answers: { answerText: string; isCorrect: boolean }[] = [];
@@ -47,16 +45,13 @@ function QuestionForm({ questionNumber }: { questionNumber: number }) {
       answers.push(item);
     });
 
+    questionItem.id = questionNumber;
     questionItem.questionText = questionRef.current;
     questionItem.answers = answers;
     setQuestionItem(questionItem);
 
-    setAction("✓"); // Let user know that the input data was saved
+    setAction("FaCheck"); // Let user know that the input data was saved
   }
-
-  useEffect(() => {
-    console.log(questionItem);
-  }, [questionItem]);
 
   function handleQuestionInput(event: ChangeEvent<HTMLInputElement>) {
     // Get current updated input value and set it to ref
@@ -86,7 +81,7 @@ function QuestionForm({ questionNumber }: { questionNumber: number }) {
   }
 
   function changeAction() {
-    if (action === "✓") {
+    if (action === "FaCheck") {
       setAction("Update"); // Let user know that the input data was updated and needs to be saved again
     }
   }

@@ -1,3 +1,4 @@
+import { FaCheck } from "react-icons/fa";
 import styles from "../styles/Button.module.css";
 
 type ButtonProps = { text: string; action?: () => void };
@@ -6,7 +7,12 @@ function Button(props: ButtonProps) {
   const { text, action } = props;
   return (
     <div className={styles.button_parent} onClick={action}>
-      <button className={styles.button}>{text}</button>
+      <button
+        className={styles.button}
+        disabled={text === "FaCheck" ? true : false}
+      >
+        {text === "FaCheck" ? <FaCheck /> : text}
+      </button>
     </div>
   );
 }
