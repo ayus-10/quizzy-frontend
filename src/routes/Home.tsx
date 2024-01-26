@@ -32,8 +32,8 @@ function Home() {
       title: "Creating a quiz",
       state: "create",
       steps: [
-        "Click on the Create Quiz button below",
-        "Add the questions and answers",
+        "Click on the Create Quiz button below.",
+        "Add the questions and answers.",
         "Create your quiz!",
       ],
     },
