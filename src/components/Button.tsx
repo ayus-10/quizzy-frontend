@@ -1,4 +1,5 @@
 import { FaCheck } from "react-icons/fa";
+import { SyncLoader } from "react-spinners";
 import styles from "../styles/Button.module.css";
 
 type ButtonProps = { text: string; action?: () => void };
@@ -11,7 +12,13 @@ function Button(props: ButtonProps) {
         className={styles.button}
         disabled={text === "FaCheck" ? true : false}
       >
-        {text === "FaCheck" ? <FaCheck /> : text}
+        {text === "FaCheck" ? (
+          <FaCheck />
+        ) : text === "SyncLoader" ? (
+          <SyncLoader color="#f0f0f0" />
+        ) : (
+          text
+        )}
       </button>
     </div>
   );

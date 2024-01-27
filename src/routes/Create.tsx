@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { API } from "../config/api";
 import QuestionForm from "../components/QuestionForm";
 import styles from "../styles/Create.module.css";
 import Button from "../components/Button";
@@ -13,6 +15,8 @@ export type questionItemType = {
 };
 
 function Create() {
+  const [saving, setSaving] = useState(false);
+
   const [questionNumber, setQuestionNumber] = useState(1); // Used to add another QuestionForm in the page
 
   // Create an empty object that will be set to initial questionItem state
@@ -54,6 +58,22 @@ function Create() {
     setQuestionNumber((prev) => prev + 1);
   }
 
+  function handleSubmitQuiz() {
+    setSaving(true);
+
+    axios
+      .post(API, questionItemArrayRef.current)
+      .then((res) => {
+        localStorage.setItem("QUIZ_INFO", JSON.stringify(res.data));
+        setSaving(false);
+        window.location.href = "/info";
+      })
+      .catch((err) => {
+        setSaving(false);
+        alert(err.message);
+      });
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.questions}>
@@ -69,8 +89,8 @@ function Create() {
         <div className={styles.button_parent}>
           <Button text="Add question" action={addQuestion} />
           <Button
-            text="Submit quiz"
-            action={() => console.log(questionItemArrayRef.current)}
+            text={saving ? "SyncLoader" : "Submit quiz"}
+            action={handleSubmitQuiz}
           />
         </div>
       </div>
