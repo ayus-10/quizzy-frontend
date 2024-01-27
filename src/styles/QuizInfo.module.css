@@ -1,0 +1,55 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--white);
+  display: grid;
+  place-items: center;
+}
+
+.box {
+  width: 90%;
+  padding: 2rem 1rem;
+  border-radius: var(--round-border);
+  border-bottom: 0.25rem solid var(--red-1);
+  background-color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.box > h2 {
+  font-size: 1.25rem;
+}
+
+.text_parent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.text {
+  display: flex;
+}
+
+.text > p,
+.text > span {
+  font-size: 1.25rem;
+}
+
+.text > span {
+  margin-left: auto;
+  font-style: italic;
+}
+
+@media screen and (min-width: 769px) {
+  .box {
+    padding: 2rem;
+    width: 50%;
+  }
+
+  .box > h2,
+  .text > p,
+  .text > span {
+    font-size: 1.5rem;
+  }
+}
