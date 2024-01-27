@@ -30,24 +30,23 @@ function Create() {
   const [questionItem, setQuestionItem] =
     useState<questionItemType>(emptyQuestionItem);
 
-  const questionItemArrayRef = useRef<questionItemType[]>([]);
+  const questionItemArrayRef = useRef<questionItemType[]>([emptyQuestionItem]);
 
   useEffect(() => {
     const questionItemArray = questionItemArrayRef.current;
-    if (questionItemArray.length > 0) {
-      questionItemArray.forEach((object, index) => {
-        if (questionItem.id) {
-          if (object.id === questionItem.id) {
-            questionItemArray[index] = questionItem;
-            return;
-          } else {
-            questionItemArray.push(questionItem);
-            return;
-          }
+    let itemUpdated = false;
+    if (questionItem.id) {
+      for (let index = 0; index < questionItemArray.length; index++) {
+        if (questionItemArray[index].id === questionItem.id) {
+          questionItemArray[index] = questionItem; // Update previous object
+          itemUpdated = true;
+          break;
         }
-      });
-    } else {
-      questionItemArray.push(questionItem);
+      }
+      if (!itemUpdated) {
+        // If no object was updated previously, push the object to array
+        questionItemArray.push(questionItem);
+      }
     }
   }, [questionItem]);
 
