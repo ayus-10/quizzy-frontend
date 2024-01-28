@@ -1,5 +1,6 @@
 import styles from "../styles/Home.module.css";
 import Button from "../components/Button";
+import MyLink from "../components/MyLink";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -9,6 +10,10 @@ type tabContentType = {
   title: string;
   state: activeTabType;
   steps: string[];
+  button: {
+    name: "Result" | "Info";
+    link: "/result" | "/info";
+  };
 };
 
 function Home() {
@@ -25,8 +30,12 @@ function Home() {
       steps: [
         "Click on the Take Quiz button below.",
         "Fill up the quiz details.",
-        "Start your quiz!",
+        "Click on the link below to view all taken quiz result.",
       ],
+      button: {
+        name: "Result",
+        link: "/result",
+      },
     },
     {
       title: "Creating a quiz",
@@ -34,8 +43,12 @@ function Home() {
       steps: [
         "Click on the Create Quiz button below.",
         "Add the questions and answers.",
-        "Create your quiz!",
+        "Click on the link below to view all created quiz info.",
       ],
+      button: {
+        name: "Info",
+        link: "/info",
+      },
     },
   ];
 
@@ -64,9 +77,9 @@ function Home() {
           ))}
         </div>
         <ul className={styles.steps}>
-          {tabContents.map((content) => {
-            return content.state === activeTab
-              ? content.steps.map((step, index) => (
+          {tabContents.map((item) => {
+            return item.state === activeTab
+              ? item.steps.map((step, index) => (
                   <li className={styles.step} key={index}>
                     {step}
                   </li>
@@ -74,6 +87,17 @@ function Home() {
               : null;
           })}
         </ul>
+        <div className={styles.button_parent}>
+          {tabContents.map((item, index) => {
+            return item.state === activeTab ? (
+              <MyLink
+                path={item.button.link}
+                name={item.button.name}
+                key={index}
+              ></MyLink>
+            ) : null;
+          })}
+        </div>
       </div>
       <div className={styles.button_parent}>
         <Link to={"/quiz"}>

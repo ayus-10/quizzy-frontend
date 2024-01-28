@@ -1,38 +1,44 @@
-import { Link } from "react-router-dom";
-import Button from "../components/Button";
+import type { responseDataType } from "../routes/Create";
 import styles from "../styles/QuizInfo.module.css";
+import MyLink from "../components/MyLink";
 
 function QuizInfo() {
-  const quizInfo = localStorage.getItem("QUIZ_INFO");
+  const quizInfoString = localStorage.getItem("QUIZ_INFO");
 
-  let id: string | null = null;
-  let password: string | null = null;
+  const quizInfo: responseDataType[] = quizInfoString
+    ? JSON.parse(quizInfoString)
+    : null;
 
   if (quizInfo === null) {
-    window.location.href = "/create";
-  } else {
-    id = JSON.parse(quizInfo).id;
-    password = JSON.parse(quizInfo).password;
+    window.location.href = "/";
   }
 
   return (
     <div className={styles.container}>
-      <div className={styles.box}>
-        <h2>Here's the ID and Password for your most recently created quiz.</h2>
-        <div className={styles.text_parent}>
-          <div className={styles.text}>
-            <p>ID:</p>
-            <span>{id}</span>
+      {!!quizInfo && (
+        <>
+          <h2 className={styles.info_title}>Created quizzes</h2>
+          <div className={styles.boxes}>
+            {quizInfo.map((object, index) => (
+              <div className={styles.text_parent} key={index}>
+                <div className={styles.text}>
+                  <p>ID:</p>
+                  <span>{object.id}</span>
+                </div>
+                <div className={styles.text}>
+                  <p>Password:</p>
+                  <span>{object.password}</span>
+                </div>
+                <div className={styles.text}>
+                  <p>Created:</p>
+                  <span>{object.created}</span>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className={styles.text}>
-            <p>Password:</p>
-            <span>{password}</span>
-          </div>
-        </div>
-      </div>
-      <Link to={"/"}>
-        <Button text="Back to home" />
-      </Link>
+          <MyLink path="/" name="Back to home" />
+        </>
+      )}
     </div>
   );
 }

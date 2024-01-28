@@ -14,8 +14,14 @@ export type questionItemType = {
   }[];
 };
 
+export type responseDataType = {
+  id: string;
+  password: string;
+  created: string;
+};
+
 function Create() {
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(false); // Used to show spinner instead of usual text in Submit quiz button
 
   const [questionNumber, setQuestionNumber] = useState(1); // Used to add another QuestionForm in the page
 
@@ -64,14 +70,30 @@ function Create() {
     axios
       .post(API, questionItemArrayRef.current)
       .then((res) => {
-        localStorage.setItem("QUIZ_INFO", JSON.stringify(res.data));
+        const newData: responseDataType = res.data;
+        saveQuizInfo(newData);
         setSaving(false);
         window.location.href = "/info";
       })
       .catch((err) => {
         setSaving(false);
-        alert(err.message);
+        alert(err.response.data);
       });
+  }
+
+  function saveQuizInfo(newData: responseDataType) {
+    // Get previously saved data from localStorage
+    const previousQuizInfoString = localStorage.getItem("QUIZ_INFO");
+    const previousQuizInfo: responseDataType[] = previousQuizInfoString
+      ? JSON.parse(previousQuizInfoString)
+      : null;
+
+    // Merge the new array of data with previous one
+    const newQuizInfo = previousQuizInfo ? [...previousQuizInfo] : [];
+    newQuizInfo.push(newData);
+
+    // Save to localStorage
+    localStorage.setItem("QUIZ_INFO", JSON.stringify(newQuizInfo));
   }
 
   return (
