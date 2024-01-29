@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { API } from "../config/api";
+import { API_URL } from "../config/api";
 import QuestionForm from "../components/QuestionForm";
 import styles from "../styles/Create.module.css";
 import Button from "../components/Button";
@@ -21,6 +21,8 @@ export type responseDataType = {
 };
 
 function Create() {
+  const API = API_URL + "create";
+
   const [saving, setSaving] = useState(false); // Used to show spinner instead of usual text in Submit quiz button
 
   const [questionNumber, setQuestionNumber] = useState(1); // Used to add another QuestionForm in the page

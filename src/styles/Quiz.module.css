@@ -1,0 +1,5 @@
+.join_form {
+  display: grid;
+  height: 100vh;
+  place-content: center;
+}
