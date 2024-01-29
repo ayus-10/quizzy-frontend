@@ -1,11 +1,18 @@
-import { FormEvent, useRef, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
 import styles from "../styles/JoinForm.module.css";
 import Button from "./Button";
 import axios from "axios";
 import { API_URL } from "../config/api";
+import type { quizCredentials } from "../routes/Quiz";
 
-function JoinForm() {
-  const API = API_URL + "quiz";
+type JoinFormProps = {
+  setCredentials: Dispatch<SetStateAction<quizCredentials>>;
+};
+
+function JoinForm(props: JoinFormProps) {
+  const { setCredentials } = props;
+
+  const API = API_URL + "quiz/credentials";
 
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +33,11 @@ function JoinForm() {
       axios
         .post(API, credentials)
         .then((res) => {
-          console.log(res.data);
+          // Update the state in parent component
+          setCredentials({
+            id: res.data.id,
+            password: res.data.password,
+          });
           setLoading(false);
         })
         .catch((err) => {
