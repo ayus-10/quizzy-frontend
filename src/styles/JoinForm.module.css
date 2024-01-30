@@ -5,17 +5,17 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem 1rem;
-  border-radius: 0.25rem;
+  border-radius: var(--slight-round-border);
 }
 
 .join_form > input {
   border: 0;
   outline: none;
-  border-radius: 0.5rem;
+  border-radius: var(--half-round-border);
   border-bottom: 0.25rem solid var(--gray-dark);
   padding: 0.75rem 0.5rem;
   font-size: 1rem;
-  transition: 0.2s ease-in-out;
+  transition: var(--my-transition);
 }
 
 .join_form > input:hover {
