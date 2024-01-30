@@ -3,10 +3,10 @@ import styles from "../styles/JoinForm.module.css";
 import Button from "./Button";
 import axios from "axios";
 import { API_URL } from "../config/api";
-import type { quizCredentials } from "../routes/Quiz";
+import type { quizCredentialsType } from "../routes/Quiz";
 
 type JoinFormProps = {
-  setCredentials: Dispatch<SetStateAction<quizCredentials>>;
+  setCredentials: Dispatch<SetStateAction<quizCredentialsType>>;
 };
 
 function JoinForm(props: JoinFormProps) {
