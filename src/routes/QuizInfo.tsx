@@ -1,11 +1,11 @@
-import type { responseDataType } from "../routes/Create";
 import styles from "../styles/QuizInfo.module.css";
 import MyLink from "../components/MyLink";
+import type { ResponseDataType } from "../index.d.ts";
 
 function QuizInfo() {
   const quizInfoString = localStorage.getItem("QUIZ_INFO");
 
-  const quizInfo: responseDataType[] = quizInfoString
+  const quizInfo: ResponseDataType[] = quizInfoString
     ? JSON.parse(quizInfoString)
     : null;
 

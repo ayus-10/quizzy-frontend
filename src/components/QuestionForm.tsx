@@ -8,12 +8,12 @@ import {
 } from "react";
 import Button from "./Button";
 import styles from "../styles/QuestionForm.module.css";
-import type { questionItemType } from "../routes/Create";
+import type { QuestionItemType } from "../index.d.ts";
 
 type QuestionFormProps = {
   questionNumber: number;
-  setQuestionItem: Dispatch<SetStateAction<questionItemType>>;
-  emptyQuestionItem: questionItemType;
+  setQuestionItem: Dispatch<SetStateAction<QuestionItemType>>;
+  emptyQuestionItem: QuestionItemType;
 };
 
 type actionType = "Save" | "Update" | "FaCheck";

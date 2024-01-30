@@ -4,21 +4,8 @@ import { API_URL } from "../config/api";
 import QuestionForm from "../components/QuestionForm";
 import styles from "../styles/Create.module.css";
 import Button from "../components/Button";
-
-export type questionItemType = {
-  id: number | null;
-  questionText: string;
-  answers: {
-    answerText: string;
-    isCorrect: boolean | null;
-  }[];
-};
-
-export type responseDataType = {
-  id: string;
-  password: string;
-  created: string;
-};
+import type { QuestionItemType } from "../index.d.ts";
+import type { ResponseDataType } from "../index.d.ts";
 
 function Create() {
   const API = API_URL + "create";
@@ -28,7 +15,7 @@ function Create() {
   const [questionNumber, setQuestionNumber] = useState(1); // Used to add another QuestionForm in the page
 
   // Create an empty object that will be set to initial questionItem state
-  const emptyQuestionItem: questionItemType = {
+  const emptyQuestionItem: QuestionItemType = {
     id: null,
     questionText: "",
     answers: [
@@ -40,9 +27,9 @@ function Create() {
   };
 
   const [questionItem, setQuestionItem] =
-    useState<questionItemType>(emptyQuestionItem);
+    useState<QuestionItemType>(emptyQuestionItem);
 
-  const questionItemArrayRef = useRef<questionItemType[]>([emptyQuestionItem]);
+  const questionItemArrayRef = useRef<QuestionItemType[]>([emptyQuestionItem]);
 
   useEffect(() => {
     const questionItemArray = questionItemArrayRef.current;
@@ -72,7 +59,7 @@ function Create() {
     axios
       .post(API, questionItemArrayRef.current)
       .then((res) => {
-        const newData: responseDataType = res.data;
+        const newData: ResponseDataType = res.data;
         saveQuizInfo(newData);
         setSaving(false);
         window.location.href = "/info";
@@ -83,10 +70,10 @@ function Create() {
       });
   }
 
-  function saveQuizInfo(newData: responseDataType) {
+  function saveQuizInfo(newData: ResponseDataType) {
     // Get previously saved data from localStorage
     const previousQuizInfoString = localStorage.getItem("QUIZ_INFO");
-    const previousQuizInfo: responseDataType[] = previousQuizInfoString
+    const previousQuizInfo: ResponseDataType[] = previousQuizInfoString
       ? JSON.parse(previousQuizInfoString)
       : null;
 

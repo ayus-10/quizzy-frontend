@@ -4,11 +4,11 @@ import MyLink from "../components/MyLink";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-type activeTabType = "take" | "create";
+type ActiveTabType = "take" | "create";
 
-type tabContentType = {
+type TabContentType = {
   title: string;
-  state: activeTabType;
+  state: ActiveTabType;
   steps: string[];
   button: {
     name: "Result" | "Info";
@@ -17,13 +17,13 @@ type tabContentType = {
 };
 
 function Home() {
-  const [activeTab, setActiveTab] = useState<activeTabType>("take");
+  const [activeTab, setActiveTab] = useState<ActiveTabType>("take");
 
-  function changeActiveTab(state: activeTabType) {
+  function changeActiveTab(state: ActiveTabType) {
     setActiveTab(state);
   }
 
-  const tabContents: tabContentType[] = [
+  const tabContents: TabContentType[] = [
     {
       title: "Taking a quiz",
       state: "take",

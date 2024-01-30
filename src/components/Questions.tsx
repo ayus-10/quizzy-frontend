@@ -3,18 +3,18 @@ import styles from "../styles/Questions.module.css";
 import QuestionBox from "./QuestionBox";
 import axios from "axios";
 import { API_URL } from "../config/api";
-import type { quizCredentialsType } from "../routes/Quiz";
-import type { questionItemType } from "../routes/Create";
+import type { QuizCredentialsType } from "../index.d.ts";
+import type { QuestionItemType } from "../index.d.ts";
 
 function Questions() {
   const API = API_URL + "quiz/questions";
 
-  const [questions, setQuestions] = useState<questionItemType[]>();
+  const [questions, setQuestions] = useState<QuestionItemType[]>();
 
   useEffect(() => {
     // Executed on page load to fetch credentials from localStorage
     const credentialsString = localStorage.getItem("CREDENTIALS");
-    const credentialsObject: quizCredentialsType = credentialsString
+    const credentialsObject: QuizCredentialsType = credentialsString
       ? JSON.parse(credentialsString)
       : undefined;
     if (credentialsObject) {
@@ -24,7 +24,7 @@ function Questions() {
           password: credentialsObject.password,
         })
         .then((res) => {
-          const questions: questionItemType[] = res.data;
+          const questions: QuestionItemType[] = res.data;
           setQuestions(questions);
         })
         .catch((err) => {

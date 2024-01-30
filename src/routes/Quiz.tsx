@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import JoinForm from "../components/JoinForm";
 import styles from "../styles/Quiz.module.css";
 import Questions from "../components/Questions";
-
-export type quizCredentialsType = {
-  id: string;
-  password: string;
-};
+import type { QuizCredentialsType } from "../index.d.ts";
 
 function Quiz() {
   // After user submits the form in JoinForm component, server validates the input and returns it if valid which will be stored in this state
-  const [credentials, setCredentials] = useState<quizCredentialsType>({
+  const [credentials, setCredentials] = useState<QuizCredentialsType>({
     id: "",
     password: "",
   });
@@ -25,7 +21,7 @@ function Quiz() {
   useEffect(() => {
     // Executed on page load to fetch credentials from localStorage to state
     const credentialsString = localStorage.getItem("CREDENTIALS");
-    const credentialsObject: quizCredentialsType = credentialsString
+    const credentialsObject: QuizCredentialsType = credentialsString
       ? JSON.parse(credentialsString)
       : undefined;
     if (credentialsObject) {
