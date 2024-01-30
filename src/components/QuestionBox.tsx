@@ -1,6 +1,9 @@
 import styles from "../styles/QuestionBox.module.css";
+import type { AnswerSubmissionsType } from "../index.d.ts";
+import { Dispatch, SetStateAction } from "react";
 
 type QuestionBoxProps = {
+  setAnswerSubmission: Dispatch<SetStateAction<AnswerSubmissionsType>>;
   questionNumber: number;
   questionText: string;
   answers: {
@@ -10,7 +13,16 @@ type QuestionBoxProps = {
 };
 
 function QuestionBox(props: QuestionBoxProps) {
-  const { questionNumber, questionText, answers } = props;
+  const { setAnswerSubmission, questionNumber, questionText, answers } = props;
+
+  function handleAnswer(isCorrect: boolean | null) {
+    let answerSubmission: AnswerSubmissionsType = {
+      id: questionNumber,
+      isCorrect: isCorrect,
+    };
+
+    setAnswerSubmission(answerSubmission);
+  }
 
   return (
     <div className={styles.question_box}>
@@ -20,7 +32,11 @@ function QuestionBox(props: QuestionBoxProps) {
       <div className={styles.answers_box}>
         {answers.map((answer, index) => (
           <label className={styles.answer_parent} key={index}>
-            <input type="radio" name={`question${questionNumber}`} />
+            <input
+              type="radio"
+              name={`question${questionNumber}`}
+              onChange={() => handleAnswer(answer.isCorrect)}
+            />
             <p className={styles.answer}>{answer.answerText}</p>
           </label>
         ))}

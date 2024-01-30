@@ -17,3 +17,8 @@ export type QuizCredentialsType = {
   id: string;
   password: string;
 };
+
+export type AnswerSubmissionsType = {
+  id: number | null;
+  isCorrect: boolean | null;
+};

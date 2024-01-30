@@ -41,7 +41,9 @@ function Quiz() {
           <JoinForm setCredentials={setCredentials} />
         </div>
       ) : (
-        <Questions />
+        <div className={styles.questions}>
+          <Questions />
+        </div>
       )}
     </>
   );
