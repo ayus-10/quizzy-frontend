@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import styles from "../styles/Questions.module.css";
 import QuestionBox from "./QuestionBox";
 import axios from "axios";
@@ -11,26 +11,25 @@ import type { AnswerSubmissionsType } from "../index.d.ts";
 function Questions() {
   const API = API_URL + "quiz/questions";
 
-  const [questions, setQuestions] = useState<QuestionItemType[]>();
-
-  const [index, setIndex] = useState(0);
+  const [questions, setQuestions] = useState<QuestionItemType[]>(); // Used to store questions array fetched from server
 
   const emptyAnswerSubmission: AnswerSubmissionsType = {
     id: null,
     chosenAnswer: null,
     isCorrect: null,
-  };
+  }; // Initial value
 
   const [answerSubmission, setAnswerSubmission] =
-    useState<AnswerSubmissionsType>(emptyAnswerSubmission);
+    useState<AnswerSubmissionsType>(emptyAnswerSubmission); // Used to store answer submission for each question box
 
   const answerSubmissionsRef = useRef<AnswerSubmissionsType[]>([
     emptyAnswerSubmission,
-  ]);
+  ]); // Used to store all answer submissions
 
   const answerSubmissions = answerSubmissionsRef.current;
 
   useEffect(() => {
+    // Executed whenever answer submission for any of the question box changes
     let newData: AnswerSubmissionsType = {
       id: answerSubmission.id,
       chosenAnswer: answerSubmission.chosenAnswer,
@@ -41,7 +40,7 @@ function Questions() {
 
     for (let index = 0; index < answerSubmissions.length; index++) {
       if (answerSubmissions[index].id === answerSubmission.id) {
-        answerSubmissions[index] = newData;
+        answerSubmissions[index] = newData; // Update previous answer submission
         submissionUpdated = true;
         break;
       }
@@ -51,18 +50,15 @@ function Questions() {
         JSON.stringify(emptyAnswerSubmission) ===
         JSON.stringify(answerSubmissions[0])
       ) {
-        answerSubmissions[0] = newData;
+        answerSubmissions[0] = newData; // Update initial value
       } else {
-        answerSubmissions.push(newData);
+        answerSubmissions.push(newData); // Add new answer submission
       }
     }
-
-    console.log(answerSubmission);
-    console.log(answerSubmissions);
   }, [answerSubmission]);
 
   useEffect(() => {
-    // Executed on page load to fetch credentials from localStorage
+    // Executed on page load to fetch credentials from localStorage and hit server to get questions array
     const credentialsString = localStorage.getItem("CREDENTIALS");
     const credentialsObject: QuizCredentialsType = credentialsString
       ? JSON.parse(credentialsString)
@@ -84,45 +80,63 @@ function Questions() {
     }
   }, []);
 
-  let max = 0;
+  const [doneCount, setDoneCount] = useState(0);
+
   useEffect(() => {
-    if (questions) {
-      if (questions.length > 0) {
-        max = questions.length;
+    let count = 0;
+    if (
+      JSON.stringify(emptyAnswerSubmission) !==
+      JSON.stringify(answerSubmissions[0])
+    ) {
+      answerSubmissions.forEach(() => {
+        count++;
+      });
+    }
+    setDoneCount(count);
+  }, [answerSubmission]);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    // Calculate score
+    let score = 0;
+    answerSubmissions.forEach((object) => {
+      if (object.isCorrect) {
+        score++;
       }
-    }
-  });
+    });
 
-  function handleBack() {
-    if (index > 0) {
-      setIndex((prev) => prev - 1);
-    }
-  }
+    localStorage.setItem("SCORE", score.toString());
+    localStorage.removeItem("CREDENTIALS");
 
-  function handleNext() {
-    if (index < max - 1) {
-      setIndex((prev) => prev + 1);
-    }
+    window.location.href = "/result";
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.questions_container}>
-        {!!questions && questions[index] && (
-          <QuestionBox
-            setAnswerSubmission={setAnswerSubmission}
-            questionNumber={index + 1}
-            questionText={questions[index].questionText}
-            answers={questions[index].answers}
-            correctAnswer={questions[index].correctAnswer}
-          />
-        )}
-      </div>
-      <div className={styles.button_parent}>
-        <Button text="Back" action={handleBack} />
-        <Button text="Next" action={handleNext} />
-      </div>
-    </div>
+    <form className={styles.container} onSubmit={handleSubmit}>
+      {!!questions && (
+        <>
+          <div className={styles.button_parent}>
+            <h2>
+              {doneCount} out of {questions.length} done
+            </h2>
+            <Button text="Submit" />
+          </div>
+          <div className={styles.questions_container}>
+            {questions.map((question, index) => (
+              <QuestionBox
+                key={index}
+                setAnswerSubmission={setAnswerSubmission}
+                questionNumber={index + 1}
+                questionText={question.questionText}
+                answers={question.answers}
+                correctAnswer={question.correctAnswer}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </form>
   );
 }
 
