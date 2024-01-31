@@ -39,8 +39,15 @@ function Create() {
         }
       }
       if (!itemUpdated) {
-        // If no object was updated previously, push the object to array
-        questionItemArray.push(questionItem);
+        if (
+          JSON.stringify(questionItemArray[0]) ===
+          JSON.stringify(emptyQuestionItem)
+        ) {
+          questionItemArray[0] = questionItem; // Update initial object
+        } else {
+          // If no object was updated previously, push the object to array
+          questionItemArray.push(questionItem);
+        }
       }
     }
   }, [questionItem]);
