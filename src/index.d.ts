@@ -1,10 +1,8 @@
 export type QuestionItemType = {
   id: number | null;
   questionText: string;
-  answers: {
-    answerText: string;
-    isCorrect: boolean | null;
-  }[];
+  answers: string[];
+  correctAnswer: number | null;
 };
 
 export type ResponseDataType = {
@@ -20,5 +18,6 @@ export type QuizCredentialsType = {
 
 export type AnswerSubmissionsType = {
   id: number | null;
+  chosenAnswer: number | null;
   isCorrect: boolean | null;
 };

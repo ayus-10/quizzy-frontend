@@ -33,21 +33,10 @@ function QuestionForm(props: QuestionFormProps) {
     // Set questionItem state to an empty object
     const questionItem = emptyQuestionItem;
 
-    // Create an empty array that will be set to the answers key of previous object
-    const answers: { answerText: string; isCorrect: boolean }[] = [];
-
-    // Loop through answer texts, create objects in required format and push it to previous array
-    answersRef.current.forEach((text, index) => {
-      const item = {
-        answerText: text,
-        isCorrect: index === choiceRef.current ? true : false,
-      };
-      answers.push(item);
-    });
-
     questionItem.id = questionNumber;
     questionItem.questionText = questionRef.current;
-    questionItem.answers = answers;
+    questionItem.answers = answersRef.current;
+    questionItem.correctAnswer = choiceRef.current + 1;
     setQuestionItem(questionItem);
 
     setAction("FaCheck"); // Let user know that the input data was saved

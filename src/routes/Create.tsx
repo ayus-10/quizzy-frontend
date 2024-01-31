@@ -18,12 +18,8 @@ function Create() {
   const emptyQuestionItem: QuestionItemType = {
     id: null,
     questionText: "",
-    answers: [
-      {
-        answerText: "",
-        isCorrect: null,
-      },
-    ],
+    answers: ["", "", "", ""],
+    correctAnswer: null,
   };
 
   const [questionItem, setQuestionItem] =

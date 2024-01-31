@@ -6,19 +6,24 @@ type QuestionBoxProps = {
   setAnswerSubmission: Dispatch<SetStateAction<AnswerSubmissionsType>>;
   questionNumber: number;
   questionText: string;
-  answers: {
-    answerText: string;
-    isCorrect: boolean | null;
-  }[];
+  answers: string[];
+  correctAnswer: number | null;
 };
 
 function QuestionBox(props: QuestionBoxProps) {
-  const { setAnswerSubmission, questionNumber, questionText, answers } = props;
+  const {
+    setAnswerSubmission,
+    questionNumber,
+    questionText,
+    answers,
+    correctAnswer,
+  } = props;
 
-  function handleAnswer(isCorrect: boolean | null) {
+  function handleAnswer(chosenAnswer: number) {
     let answerSubmission: AnswerSubmissionsType = {
       id: questionNumber,
-      isCorrect: isCorrect,
+      chosenAnswer: chosenAnswer,
+      isCorrect: chosenAnswer === correctAnswer,
     };
 
     setAnswerSubmission(answerSubmission);
@@ -35,9 +40,9 @@ function QuestionBox(props: QuestionBoxProps) {
             <input
               type="radio"
               name={`question${questionNumber}`}
-              onChange={() => handleAnswer(answer.isCorrect)}
+              onChange={() => handleAnswer(index + 1)}
             />
-            <p className={styles.answer}>{answer.answerText}</p>
+            <p className={styles.answer}>{answer}</p>
           </label>
         ))}
       </div>

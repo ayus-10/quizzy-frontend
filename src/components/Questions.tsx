@@ -17,36 +17,48 @@ function Questions() {
 
   const emptyAnswerSubmission: AnswerSubmissionsType = {
     id: null,
+    chosenAnswer: null,
     isCorrect: null,
   };
 
   const [answerSubmission, setAnswerSubmission] =
     useState<AnswerSubmissionsType>(emptyAnswerSubmission);
 
-  const answerSubmissions = useRef<AnswerSubmissionsType[]>([
+  const answerSubmissionsRef = useRef<AnswerSubmissionsType[]>([
     emptyAnswerSubmission,
   ]);
 
+  const answerSubmissions = answerSubmissionsRef.current;
+
   useEffect(() => {
-    console.log(answerSubmission);
+    let newData: AnswerSubmissionsType = {
+      id: answerSubmission.id,
+      chosenAnswer: answerSubmission.chosenAnswer,
+      isCorrect: answerSubmission.isCorrect,
+    };
+
     let submissionUpdated = false;
-    for (let index = 0; index < answerSubmissions.current.length; index++) {
-      if (answerSubmissions.current[index].id === answerSubmission.id) {
-        answerSubmissions.current[index] = {
-          id: answerSubmission.id,
-          isCorrect: answerSubmission.isCorrect,
-        };
+
+    for (let index = 0; index < answerSubmissions.length; index++) {
+      if (answerSubmissions[index].id === answerSubmission.id) {
+        answerSubmissions[index] = newData;
         submissionUpdated = true;
         break;
       }
     }
     if (!submissionUpdated) {
-      answerSubmissions.current.push({
-        id: answerSubmission.id,
-        isCorrect: answerSubmission.isCorrect,
-      });
+      if (
+        JSON.stringify(emptyAnswerSubmission) ===
+        JSON.stringify(answerSubmissions[0])
+      ) {
+        answerSubmissions[0] = newData;
+      } else {
+        answerSubmissions.push(newData);
+      }
     }
-    console.log(answerSubmissions.current);
+
+    console.log(answerSubmission);
+    console.log(answerSubmissions);
   }, [answerSubmission]);
 
   useEffect(() => {
@@ -102,6 +114,7 @@ function Questions() {
             questionNumber={index + 1}
             questionText={questions[index].questionText}
             answers={questions[index].answers}
+            correctAnswer={questions[index].correctAnswer}
           />
         )}
       </div>
