@@ -106,10 +106,11 @@ function Questions() {
       }
     });
 
-    localStorage.setItem("SCORE", score.toString());
+    alert(`Your score is ${score} out of ${questions?.length}`);
+
     localStorage.removeItem("CREDENTIALS");
 
-    window.location.href = "/result";
+    window.location.reload();
   }
 
   return (

@@ -12,7 +12,7 @@ type TabContentType = {
   steps: string[];
   button: {
     name: "Result" | "Info";
-    link: "/result" | "/info";
+    link: "/quiz" | "/info";
   };
 };
 
@@ -34,7 +34,7 @@ function Home() {
       ],
       button: {
         name: "Result",
-        link: "/result",
+        link: "/quiz",
       },
     },
     {
