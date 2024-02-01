@@ -1,18 +1,14 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import styles from "../styles/Questions.module.css";
 import QuestionBox from "./QuestionBox";
-import axios from "axios";
-import { API_URL } from "../config/api";
 import Button from "./Button.tsx";
-import type { QuizCredentialsType } from "../index.d.ts";
-import type { QuestionItemType } from "../index.d.ts";
-import type { AnswerSubmissionsType } from "../index.d.ts";
+import type { AnswerSubmissionsType, QuestionItemType } from "../index.d.ts";
 
-function Questions() {
-  const API = API_URL + "quiz/questions";
+type QuestionsProps = {
+  questions: QuestionItemType[];
+};
 
-  const [questions, setQuestions] = useState<QuestionItemType[]>(); // Used to store questions array fetched from server
-
+function Questions({ questions }: QuestionsProps) {
   const emptyAnswerSubmission: AnswerSubmissionsType = {
     id: null,
     chosenAnswer: null,
@@ -56,29 +52,6 @@ function Questions() {
       }
     }
   }, [answerSubmission]);
-
-  useEffect(() => {
-    // Executed on page load to fetch credentials from localStorage and hit server to get questions array
-    const credentialsString = localStorage.getItem("CREDENTIALS");
-    const credentialsObject: QuizCredentialsType = credentialsString
-      ? JSON.parse(credentialsString)
-      : undefined;
-    if (credentialsObject) {
-      axios
-        .post(API, {
-          id: credentialsObject.id,
-          password: credentialsObject.password,
-        })
-        .then((res) => {
-          const questions: QuestionItemType[] = res.data;
-          setQuestions(questions);
-        })
-        .catch((err) => {
-          alert(err.response.data);
-          localStorage.removeItem("CREDENTIALS");
-        });
-    }
-  }, []);
 
   const [doneCount, setDoneCount] = useState(0);
 
