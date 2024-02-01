@@ -6,7 +6,7 @@
 }
 
 .questions_container {
-  margin-top: -5.2rem;
+  margin-top: calc(0.5rem - 5.2rem);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -30,14 +30,14 @@
   background-color: var(--red-1);
   position: relative;
   color: var(--white);
-  height: 100%;
+  top: -0.25rem;
   display: grid;
   place-content: center;
   padding: 0.75rem 1.5rem;
   border-radius: var(--round-border);
 }
 
-.button_parent > h2::after {
+.button_parent > h2::before {
   content: "";
   position: absolute;
   width: 100%;
@@ -55,6 +55,7 @@
 
   .button_parent > h2 {
     font-size: 1.5rem;
+    height: 100%;
   }
 }
 
