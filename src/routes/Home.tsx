@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 import Button from "../components/Button";
 import MyLink from "../components/MyLink";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 
 type ActiveTabType = "take" | "create";
 
@@ -19,18 +19,14 @@ type TabContentType = {
 function Home() {
   const [activeTab, setActiveTab] = useState<ActiveTabType>("take");
 
-  function changeActiveTab(state: ActiveTabType) {
-    setActiveTab(state);
-  }
-
   const tabContents: TabContentType[] = [
     {
       title: "Taking a quiz",
       state: "take",
       steps: [
-        "Click on the Take Quiz button below.",
-        "Fill up the quiz details.",
-        "Click on the link below to view all taken quiz result.",
+        'Click on the "Take" button above.',
+        "Enter the ID and Password of the quiz.",
+        'Click on "Result" below to view all taken quiz result.',
       ],
       button: {
         name: "Result",
@@ -41,9 +37,9 @@ function Home() {
       title: "Creating a quiz",
       state: "create",
       steps: [
-        "Click on the Create Quiz button below.",
-        "Add the questions and answers.",
-        "Click on the link below to view all created quiz info.",
+        'Click on the "Create" button above.',
+        "Fill up the questions and answers for your quiz.",
+        'Click on "Info" below to view all created quiz info.',
       ],
       button: {
         name: "Info",
@@ -52,60 +48,59 @@ function Home() {
     },
   ];
 
+  const activeTabStyles: CSSProperties = {
+    width: "100%",
+  };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Welcome to Quizzy!</h1>
-      <div className={styles.description}>
+      <nav className={styles.nav}>
+        <div className={styles.nav_body}>
+          <div className={styles.logo}>
+            <h1>Quizzy</h1>
+          </div>
+          <div className={styles.button_parent}>
+            <Link to={"/quiz"}>
+              <Button text="Take" />
+            </Link>
+            <Link to={"/create"}>
+              <Button text="Create" />
+            </Link>
+          </div>
+        </div>
+      </nav>
+      <div className={styles.body}>
         <div className={styles.tabs}>
-          {tabContents.map((item) => (
-            <span
-              key={item.state}
+          {tabContents.map((tab, index) => (
+            <button
               className={styles.tab}
-              onClick={() => changeActiveTab(item.state)}
+              key={index}
+              onClick={() => setActiveTab(tab.state)}
             >
-              <h3 className={styles.tab_title}>{item.title}</h3>
+              <div className={styles.tab_title}>{tab.title}</div>
               <div
                 className={styles.underline}
-                style={{
-                  backgroundColor:
-                    activeTab === item.state
-                      ? "var(--red-1)"
-                      : "var(--gray-dark)",
-                }}
+                style={tab.state === activeTab ? activeTabStyles : undefined}
               ></div>
-            </span>
+            </button>
           ))}
         </div>
-        <ul className={styles.steps}>
-          {tabContents.map((item) => {
-            return item.state === activeTab
-              ? item.steps.map((step, index) => (
-                  <li className={styles.step} key={index}>
-                    {step}
-                  </li>
-                ))
-              : null;
-          })}
-        </ul>
-        <div className={styles.button_parent}>
-          {tabContents.map((item, index) => {
-            return item.state === activeTab ? (
-              <MyLink
-                path={item.button.link}
-                name={item.button.name}
-                key={index}
-              ></MyLink>
-            ) : null;
-          })}
+        <div className={styles.list}>
+          {tabContents[activeTab === "take" ? 0 : 1].steps.map(
+            (item, index) => (
+              <p key={index} className={styles.item}>
+                <span className={styles.item_marker}>{index + 1}</span>
+                <span className={styles.item_text}>{item}</span>
+              </p>
+            )
+          )}
         </div>
-      </div>
-      <div className={styles.button_parent}>
-        <Link to={"/quiz"}>
-          <Button text="Take quiz" />
-        </Link>
-        <Link to={"/create"}>
-          <Button text="Create quiz" />
-        </Link>
+        <div className={styles.link}>
+          <MyLink
+            name={tabContents[activeTab === "take" ? 0 : 1].button.name}
+            path={tabContents[activeTab === "take" ? 0 : 1].button.link}
+          />
+        </div>
       </div>
     </div>
   );
