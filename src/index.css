@@ -6,10 +6,7 @@
   --white: #f0f0f0;
   --gray: #e5e5e5;
   --gray-dark: #c1c1c1;
-  --round-border: 0.75rem;
-  --half-round-border: 0.5rem;
-  --slight-round-border: 0.25rem;
-  --my-transition: 0.2s ease-in-out;
+  --default-transition: 0.2s ease-in-out;
 }
 
 * {
