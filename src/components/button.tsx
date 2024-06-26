@@ -1,7 +1,7 @@
 import styles from "../styles/button.module.css";
 
 type ButtonProps = {
-  action: () => void;
+  action?: () => void;
   title: string;
   largeFont?: boolean;
 };

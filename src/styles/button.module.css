@@ -6,6 +6,7 @@
   cursor: pointer;
   border-radius: 4px;
   transition: var(--default-transition);
+  text-transform: capitalize;
 }
 
 .button:hover {
