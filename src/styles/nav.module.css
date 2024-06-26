@@ -1,0 +1,23 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--gray);
+  height: 70px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+@media screen and (max-width: 480px) {
+  .logo {
+    display: none;
+  }
+
+  .buttons {
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+}
