@@ -3,16 +3,16 @@ import Button from "./button";
 import styles from "../styles/auth-form.module.css";
 import { Link } from "react-router-dom";
 
-type FormType = "login" | "register";
+type FormAction = "login" | "register";
 
 type AuthFormProps = {
-  type: FormType;
+  action: FormAction;
   setEmail: Dispatch<SetStateAction<string>>;
   setPassword: Dispatch<SetStateAction<string>>;
 };
 
 export default function AuthForm(props: AuthFormProps) {
-  const { type, setEmail, setPassword } = props;
+  const { action, setEmail, setPassword } = props;
 
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
@@ -34,7 +34,7 @@ export default function AuthForm(props: AuthFormProps) {
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        <WelcomeText type={type} />
+        <WelcomeText formType={action} />
       </div>
       <form onSubmit={(e) => handleSubmit(e)} className={styles.form}>
         <div className={styles.input_div}>
@@ -57,15 +57,17 @@ export default function AuthForm(props: AuthFormProps) {
             className={styles.input}
           />
         </div>
-        <Button title={type} />
+        <Button title={action} />
       </form>
-      <BottomText type={type} />
+      <div className={styles.bottom_text}>
+        <BottomText formType={action} />
+      </div>
     </div>
   );
 }
 
-function WelcomeText({ type }: { type: FormType }) {
-  return type === "register" ? (
+function WelcomeText({ formType }: { formType: FormAction }) {
+  return formType === "register" ? (
     <span>
       Welcome to Quizzy!🎉 <br />
       Please register as an Admin.
@@ -78,8 +80,8 @@ function WelcomeText({ type }: { type: FormType }) {
   );
 }
 
-function BottomText({ type }: { type: FormType }) {
-  return type === "register" ? (
+function BottomText({ formType }: { formType: FormAction }) {
+  return formType === "register" ? (
     <span>
       Already have an account? <Link to="/login">Login</Link>
     </span>

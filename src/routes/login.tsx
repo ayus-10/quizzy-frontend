@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import AuthForm from "../components/auth-form";
 import Nav from "../components/nav";
 import { BASE_API_URL } from "../config";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
+  axios.defaults.withCredentials = true;
+
   const apiUrl = BASE_API_URL + "/users/login";
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!loginEmail || !loginPassword) {
@@ -19,15 +24,18 @@ export default function Login() {
 
     axios
       .post(apiUrl, userData)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        alert(res.data);
+        navigate("/admin");
+      })
+      .catch((err: AxiosError) => alert(err.response?.data ?? err.message));
   }, [loginEmail, loginPassword]);
 
   return (
     <>
       <Nav />
       <AuthForm
-        type="login"
+        action="login"
         setEmail={setLoginEmail}
         setPassword={setLoginPassword}
       />
