@@ -9,8 +9,6 @@ export default function Register() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
-  axios.defaults.withCredentials = true;
-
   const apiUrl = BASE_API_URL + "/users/register";
 
   const navigate = useNavigate();

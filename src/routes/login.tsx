@@ -9,8 +9,6 @@ export default function Login() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  axios.defaults.withCredentials = true;
-
   const apiUrl = BASE_API_URL + "/users/login";
 
   const navigate = useNavigate();
