@@ -9,6 +9,8 @@ export default function Register() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const apiUrl = BASE_API_URL + "/users/register";
 
   const navigate = useNavigate();
@@ -20,13 +22,16 @@ export default function Register() {
 
     const userData = { email: registerEmail, password: registerPassword };
 
+    setIsLoading(true);
+
     axios
       .post(apiUrl, userData)
       .then((res) => {
         alert(res.data);
         navigate("/login");
       })
-      .catch((err: AxiosError) => alert(err.response?.data ?? err.message));
+      .catch((err: AxiosError) => alert(err.response?.data ?? err.message))
+      .finally(() => setIsLoading(false));
   }, [registerEmail, registerPassword]);
 
   return (
@@ -34,6 +39,7 @@ export default function Register() {
       <Nav />
       <AuthForm
         action="register"
+        loading={isLoading}
         setEmail={setRegisterEmail}
         setPassword={setRegisterPassword}
       />

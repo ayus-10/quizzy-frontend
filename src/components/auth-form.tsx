@@ -2,17 +2,19 @@ import { Dispatch, FormEvent, SetStateAction, useRef } from "react";
 import Button from "./button";
 import styles from "../styles/auth-form.module.css";
 import { Link } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 type FormAction = "login" | "register";
 
 type AuthFormProps = {
   action: FormAction;
+  loading: boolean;
   setEmail: Dispatch<SetStateAction<string>>;
   setPassword: Dispatch<SetStateAction<string>>;
 };
 
 export default function AuthForm(props: AuthFormProps) {
-  const { action, setEmail, setPassword } = props;
+  const { action, loading, setEmail, setPassword } = props;
 
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
@@ -57,7 +59,11 @@ export default function AuthForm(props: AuthFormProps) {
             className={styles.input}
           />
         </div>
-        <Button title={action} />
+        {loading ? (
+          <BeatLoader style={{ margin: "auto" }} color="#f43f5e" />
+        ) : (
+          <Button title={action} />
+        )}
       </form>
       <div className={styles.bottom_text}>
         <BottomText formType={action} />

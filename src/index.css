@@ -6,6 +6,7 @@
   --white: #f0f0f0;
   --gray: #e5e5e5;
   --gray-dark: #c1c1c1;
+  --black-transparent: rgb(10, 10, 10, 0.8);
   --default-transition: 0.2s ease-in-out;
 }
 

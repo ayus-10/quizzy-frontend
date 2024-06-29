@@ -4,6 +4,7 @@ import {
   AuthenticatedUserContext,
   IAuthenticatedUserContext,
 } from "../contexts/authenticated-user.context";
+import AdminSidebar from "../components/admin-sidebar";
 
 export default function Admin() {
   useAuthentication();
@@ -14,7 +15,7 @@ export default function Admin() {
 
   return (
     <>
-      <main>{email}</main>
+      <AdminSidebar userEmail={email} />
     </>
   );
 }
