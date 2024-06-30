@@ -1,0 +1,15 @@
+.loading_container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--red-2);
+  gap: 30px;
+}
+
+.loading_container > p {
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: bold;
+}

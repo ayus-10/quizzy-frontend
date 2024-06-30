@@ -45,8 +45,12 @@
   border-color: var(--red-2);
 }
 
-.bottom_text {
+.center {
   text-align: center;
+}
+
+.center > button {
+  width: 100%;
 }
 
 @media screen and (max-width: 480px) {

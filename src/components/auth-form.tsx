@@ -59,13 +59,11 @@ export default function AuthForm(props: AuthFormProps) {
             className={styles.input}
           />
         </div>
-        {loading ? (
-          <BeatLoader style={{ margin: "auto" }} color="#f43f5e" />
-        ) : (
-          <Button title={action} />
-        )}
+        <div className={styles.center}>
+          {loading ? <BeatLoader color="#f43f5e" /> : <Button title={action} />}
+        </div>
       </form>
-      <div className={styles.bottom_text}>
+      <div className={styles.center}>
         <BottomText formType={action} />
       </div>
     </div>
@@ -73,27 +71,37 @@ export default function AuthForm(props: AuthFormProps) {
 }
 
 function WelcomeText({ formType }: { formType: FormAction }) {
-  return formType === "register" ? (
-    <span>
-      Welcome to Quizzy!🎉 <br />
-      Please register as an Admin.
-    </span>
-  ) : (
-    <span>
-      Welcome back Admin!👋 <br />
-      Please log in to your account.
-    </span>
-  );
+  switch (formType) {
+    case "register":
+      return (
+        <span>
+          Welcome to Quizzy!🎉 <br />
+          Please register as an Admin.
+        </span>
+      );
+    case "login":
+      return (
+        <span>
+          Welcome back Admin!👋 <br />
+          Please log in to your account.
+        </span>
+      );
+  }
 }
 
 function BottomText({ formType }: { formType: FormAction }) {
-  return formType === "register" ? (
-    <span>
-      Already have an account? <Link to="/login">Login</Link>
-    </span>
-  ) : (
-    <span>
-      Don&apos;t have an account? <Link to="/register">Register</Link>
-    </span>
-  );
+  switch (formType) {
+    case "register":
+      return (
+        <span>
+          Already have an account? <Link to="/login">Login</Link>
+        </span>
+      );
+    case "login":
+      return (
+        <span>
+          Don&apos;t have an account? <Link to="/register">Register</Link>
+        </span>
+      );
+  }
 }

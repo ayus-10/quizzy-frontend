@@ -5,6 +5,8 @@ import {
   IAuthenticatedUserContext,
 } from "../contexts/authenticated-user.context";
 import AdminSidebar from "../components/admin-sidebar";
+import styles from "../styles/admin.module.css";
+import { HashLoader } from "react-spinners";
 
 export default function Admin() {
   useAuthentication();
@@ -13,9 +15,19 @@ export default function Admin() {
     AuthenticatedUserContext
   ) as IAuthenticatedUserContext;
 
-  return (
-    <>
-      <AdminSidebar userEmail={email} />
-    </>
-  );
+  switch (typeof email) {
+    case "string":
+      return (
+        <>
+          <AdminSidebar userEmail={email} />
+        </>
+      );
+    default:
+      return (
+        <div className={styles.loading_container}>
+          <HashLoader color="#f43f5e" size={100} />
+          <p>Please wait</p>
+        </div>
+      );
+  }
 }
