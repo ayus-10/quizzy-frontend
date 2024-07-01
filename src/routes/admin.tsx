@@ -25,7 +25,7 @@ export default function Admin() {
     default:
       return (
         <div className={styles.loading_container}>
-          <HashLoader color="#f43f5e" size={100} />
+          <HashLoader color="#f43f5e" size={60} />
           <p>Please wait</p>
         </div>
       );

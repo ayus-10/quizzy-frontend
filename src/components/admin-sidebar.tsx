@@ -5,6 +5,8 @@ import Button from "./button";
 import handleLogout from "../utils/handle-logout";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setActiveTab } from "../redux/slices/active-tab.slice";
 
 type ActiveTab = "create" | "manage" | "result";
 
@@ -17,7 +19,9 @@ export default function AdminSidebar(props: AdminSidebarProps) {
 
   const navButtons: ActiveTab[] = ["create", "manage", "result"];
 
-  const [activeTab, setActiveTab] = useState<ActiveTab>("create");
+  const dispatch = useAppDispatch();
+
+  const activeTab = useAppSelector((state) => state.activeTab);
 
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
@@ -43,7 +47,7 @@ export default function AdminSidebar(props: AdminSidebarProps) {
             return (
               <button
                 key={buttonTitle}
-                onClick={() => setActiveTab(buttonTitle)}
+                onClick={() => dispatch(setActiveTab(buttonTitle))}
                 className={`${styles.button} ${
                   isActive && styles.active_button
                 }`}
