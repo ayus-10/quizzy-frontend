@@ -1,7 +1,7 @@
 .hamburger {
   display: none;
   position: fixed;
-  right: 10px;
+  right: 30px;
   top: 30px;
   border: 0;
   background-color: var(--red-2);
