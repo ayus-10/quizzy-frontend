@@ -1,71 +1,36 @@
-import { FormEvent, useRef } from "react";
-import Button from "../../components/button";
+import { useState } from "react";
+import { v4 as uuid } from "uuid";
+import QuizInfoForm from "../../components/quiz-info-form";
+import QuestionInput from "../../components/question-input";
 import styles from "../../styles/create.module.css";
-import saveQuizInfo from "../../utils/save-quiz-info";
+import Button from "../../components/button";
+
+export type CreationStage = "initial" | "final";
 
 export default function Create() {
-  const titleInputElement = useRef<HTMLInputElement>(null);
-  const startTimeInputElement = useRef<HTMLInputElement>(null);
-  const endTimeInputElement = useRef<HTMLInputElement>(null);
+  const [creationStage, setCreationStage] = useState<CreationStage>("initial");
 
-  function getUTCTimeStamp(date: string) {
-    const utcDateString = new Date(date).toISOString();
-    const timeStamp = new Date(utcDateString).getTime();
-    return timeStamp;
-  }
+  const [numberOfQuestions, setNumberOfQuestions] = useState(1);
 
-  async function handleInfoForm(e: FormEvent) {
-    e.preventDefault();
-
-    const title = titleInputElement.current?.value as string;
-    const startTime = startTimeInputElement.current?.value as string;
-    const endTime = endTimeInputElement.current?.value as string;
-
-    if (!title || !startTime || !endTime) {
-      return;
-    }
-
-    const quizInfo = {
-      title,
-      startTime: getUTCTimeStamp(startTime),
-      endTime: getUTCTimeStamp(endTime),
-    };
-
-    saveQuizInfo(quizInfo).then((res) => {
-      alert(res);
-    });
-  }
-
-  return (
-    <div className={styles.container}>
-      <form className={styles.info_form} onSubmit={(e) => handleInfoForm(e)}>
-        <h1 className={styles.title}>Create a test</h1>
-        <div className={styles.input_div}>
-          <label htmlFor="titleInput">Title</label>
-          <input type="text" id="titleInput" ref={titleInputElement} />
-        </div>
-        <div className={styles.date_input_div}>
-          <div className={styles.input_div}>
-            <label htmlFor="startTimeInput">Start time</label>
-            <input
-              type="datetime-local"
-              id="startTimeInput"
-              ref={startTimeInputElement}
-            />
+  switch (creationStage) {
+    case "initial":
+      return <QuizInfoForm setStage={setCreationStage} />;
+    case "final":
+      return (
+        <div className={styles.container}>
+          <div className={styles.questions}>
+            {Array.from({ length: numberOfQuestions }).map((_, index) => (
+              <QuestionInput key={uuid()} questionNumber={index + 1} />
+            ))}
           </div>
-          <div className={styles.input_div}>
-            <label htmlFor="endTimeInput">End time</label>
-            <input
-              type="datetime-local"
-              id="endTimeInput"
-              ref={endTimeInputElement}
+          <div className={styles.options}>
+            <Button
+              title="Add question"
+              action={() => setNumberOfQuestions((prev) => prev + 1)}
             />
+            <Button title="Done" />
           </div>
         </div>
-        <div className={styles.button_div}>
-          <Button title="Save" />
-        </div>
-      </form>
-    </div>
-  );
+      );
+  }
 }

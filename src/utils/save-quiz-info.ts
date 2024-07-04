@@ -14,8 +14,7 @@ export default async function saveQuizInfo(info: QuizInfo) {
   const sendRequest = async () => axios.post(apiUrl, info);
 
   try {
-    const { data } = await sendRequest();
-    return data;
+    return await sendRequest();
   } catch (err) {
     if (!axios.isAxiosError(err)) {
       return;
@@ -23,15 +22,14 @@ export default async function saveQuizInfo(info: QuizInfo) {
     if (err.response?.status === 403) {
       await getRefreshedTokens();
       try {
-        const { data } = await sendRequest();
-        return data;
+        return await sendRequest();
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          return err.response?.data;
+          return err;
         }
       }
     } else if (err.response?.status === 400) {
-      return err.response?.data;
+      return err;
     }
   }
 }
