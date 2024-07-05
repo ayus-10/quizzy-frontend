@@ -4,6 +4,8 @@ import axios from "axios";
 import Button from "./button";
 import styles from "../styles/quiz-info-form.module.css";
 import { CreationStage } from "../routes/admin/create";
+import { useAppDispatch } from "../redux/hooks";
+import { setAlertMessage } from "../redux/slices/alert-message.slice";
 
 type QuizInfoFormProps = {
   setStage: Dispatch<SetStateAction<CreationStage>>;
@@ -11,6 +13,8 @@ type QuizInfoFormProps = {
 
 export default function QuizInfoForm(props: QuizInfoFormProps) {
   const { setStage } = props;
+
+  const dispatch = useAppDispatch();
 
   const titleInputElement = useRef<HTMLInputElement>(null);
   const startTimeInputElement = useRef<HTMLInputElement>(null);
@@ -42,9 +46,11 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
     const res = await saveQuizInfo(quizInfo);
     if (res) {
       if (axios.isAxiosError(res)) {
-        alert(res.response?.data);
+        dispatch(
+          setAlertMessage({ message: res.response?.data, status: "error" })
+        );
       } else {
-        alert(res.data);
+        setAlertMessage({ message: res.data, status: "success" });
         setStage("final");
       }
     }

@@ -1,0 +1,42 @@
+.alert_message {
+  position: fixed;
+  z-index: 50;
+  top: 9px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  color: white;
+  font-size: 18px;
+}
+
+.icon {
+  font-size: 32px;
+  display: grid;
+  place-content: center;
+}
+
+.success {
+  background-color: var(--success);
+}
+
+.error {
+  background-color: var(--error);
+}
+
+@media screen and (max-width: 480px) {
+  .alert_message {
+    width: calc(100vw - 10px);
+    right: 50%;
+    transform: translateX(50%);
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .alert_message {
+    min-width: 400px;
+    max-width: 60vw;
+    right: 9px;
+  }
+}

@@ -4,6 +4,8 @@ import Nav from "../components/nav";
 import { BASE_API_URL } from "../config";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../redux/hooks";
+import { setAlertMessage } from "../redux/slices/alert-message.slice";
 
 export default function Register() {
   const [registerEmail, setRegisterEmail] = useState("");
@@ -14,6 +16,8 @@ export default function Register() {
   const apiUrl = BASE_API_URL + "/users/register";
 
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!registerEmail || !registerPassword) {
@@ -27,10 +31,17 @@ export default function Register() {
     axios
       .post(apiUrl, userData)
       .then((res) => {
-        alert(res.data);
+        dispatch(setAlertMessage({ message: res.data, status: "success" }));
         navigate("/login");
       })
-      .catch((err: AxiosError) => alert(err.response?.data ?? err.message))
+      .catch((err: AxiosError) =>
+        dispatch(
+          setAlertMessage({
+            message: (err.response?.data as string) ?? err.message,
+            status: "error",
+          })
+        )
+      )
       .finally(() => setIsLoading(false));
   }, [registerEmail, registerPassword]);
 
