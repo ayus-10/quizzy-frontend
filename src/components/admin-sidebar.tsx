@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/admin-sidebar.module.css";
 import { FaUser } from "react-icons/fa";
 import Button from "./button";
 import handleLogout from "../utils/handle-logout";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setActiveTab } from "../redux/slices/active-tab.slice";
-
-type ActiveTab = "create" | "manage" | "result";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type AdminSidebarProps = {
   userEmail: string | null;
@@ -17,15 +14,30 @@ type AdminSidebarProps = {
 export default function AdminSidebar(props: AdminSidebarProps) {
   const { userEmail } = props;
 
-  const navButtons: ActiveTab[] = ["create", "manage", "result"];
+  const navigate = useNavigate();
 
-  const dispatch = useAppDispatch();
-
-  const activeTab = useAppSelector((state) => state.activeTab);
+  const [currentPage, setCurrentPage] = useState<string | undefined>(undefined);
 
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+
+  const navLinks = [
+    { title: "create", path: "/admin/create" },
+    { title: "manage", path: "/admin/manage" },
+    { title: "result", path: "/admin/result" },
+  ];
+
+  const location = useLocation();
+
+  function getCurrentPageFromPath() {
+    const currentLocation = navLinks.find((link) => {
+      return location.pathname.includes(link.title);
+    });
+    return currentLocation?.title;
+  }
+
+  useEffect(() => setCurrentPage(() => getCurrentPageFromPath()), [location]);
 
   return (
     <>
@@ -41,13 +53,13 @@ export default function AdminSidebar(props: AdminSidebarProps) {
         }`}
       >
         <nav className={styles.nav}>
-          {navButtons.map((buttonTitle) => {
-            const isActive = buttonTitle === activeTab;
+          {navLinks.map((link) => {
+            const isActive = link.title === currentPage;
 
             return (
               <button
-                key={buttonTitle}
-                onClick={() => dispatch(setActiveTab(buttonTitle))}
+                key={link.title}
+                onClick={() => navigate(link.path)}
                 className={`${styles.button} ${
                   isActive && styles.active_button
                 }`}
@@ -57,7 +69,7 @@ export default function AdminSidebar(props: AdminSidebarProps) {
                     isActive && styles.active_button_mark
                   }`}
                 />
-                <span className={styles.button_text}>{buttonTitle}</span>
+                <span className={styles.button_text}>{link.title}</span>
               </button>
             );
           })}

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./routes/home";
 import Login from "./routes/login";
 import Register from "./routes/register";
@@ -20,7 +20,8 @@ export default function App() {
         <Route Component={Login} path="/login" />
         <Route Component={Register} path="/register" />
         <Route Component={Admin} path="/admin">
-          <Route Component={Create} path="create" index />
+          <Route element={<Navigate to="create" />} path="" />
+          <Route Component={Create} path="create" />
           <Route Component={Manage} path="manage" />
           <Route Component={Result} path="result" />
         </Route>
