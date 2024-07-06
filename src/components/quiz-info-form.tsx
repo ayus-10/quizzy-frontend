@@ -1,4 +1,4 @@
-import { FormEvent, SetStateAction, useRef, Dispatch } from "react";
+import { FormEvent, SetStateAction, useRef, Dispatch, useEffect } from "react";
 import saveQuizInfo from "../utils/save-quiz-info";
 import { AxiosError } from "axios";
 import Button from "./button";
@@ -19,6 +19,13 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
   const titleInputElement = useRef<HTMLInputElement>(null);
   const startTimeInputElement = useRef<HTMLInputElement>(null);
   const endTimeInputElement = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const quizToken = localStorage.getItem("QUIZ_TOKEN");
+    if (quizToken) {
+      setStage("final");
+    }
+  }, []);
 
   function getUTCTimeStamp(date: string) {
     const utcDateString = new Date(date).toISOString();
@@ -45,7 +52,14 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
 
     saveQuizInfo(quizInfo)
       .then((res) => {
-        dispatch(setAlertMessage({ message: res?.data, status: "success" }));
+        dispatch(
+          setAlertMessage({
+            message: "Please continue creating your quiz",
+            status: "success",
+          })
+        );
+        const quizToken = res?.data.quizToken as string;
+        localStorage.setItem("QUIZ_TOKEN", quizToken);
         setStage("final");
       })
       .catch((err: AxiosError) =>
@@ -61,7 +75,7 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
   return (
     <div className={styles.container}>
       <form className={styles.info_form} onSubmit={(e) => handleForm(e)}>
-        <h1 className={styles.title}>Create a test</h1>
+        <h1 className={styles.title}>Create a quiz</h1>
         <div className={styles.input_div}>
           <label htmlFor="titleInput">Title</label>
           <input type="text" id="titleInput" ref={titleInputElement} />

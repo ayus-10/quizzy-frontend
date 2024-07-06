@@ -5,6 +5,11 @@
   padding: 30px;
 }
 
+.title {
+  color: var(--black);
+  margin-bottom: 20px;
+}
+
 .questions {
   flex-grow: 1;
   display: flex;

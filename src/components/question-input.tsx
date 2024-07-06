@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/question-input.module.css";
 import Button from "./button";
 import { v4 as uuid } from "uuid";
@@ -10,10 +10,13 @@ type QuestionInputProps = {
 export default function QuestionInput(props: QuestionInputProps) {
   const { questionNumber } = props;
 
-  const [numberOfChoices, setNumberOfChoices] = useState(2);
+  const [choiceIds, setChoiceIds] = useState<string[]>([]);
 
-  function incrementNumberOfChoices() {
-    setNumberOfChoices((prev) => (prev < 6 ? prev + 1 : prev));
+  useEffect(() => saveNewId(), []);
+
+  function saveNewId() {
+    const newId = uuid();
+    setChoiceIds((prev) => [...prev, newId]);
   }
 
   return (
@@ -23,9 +26,9 @@ export default function QuestionInput(props: QuestionInputProps) {
         <input type="text" id="questionInput" placeholder="Question here..." />
       </div>
       <div className={styles.answer_container}>
-        {Array.from({ length: numberOfChoices }).map((_, index) => (
+        {choiceIds.map((id, index) => (
           <div
-            key={uuid()}
+            key={id}
             className={`${styles.answer_input_div} ${styles.input_div}`}
           >
             <input
@@ -41,11 +44,11 @@ export default function QuestionInput(props: QuestionInputProps) {
         <input
           type="number"
           min={1}
-          max={numberOfChoices}
+          max={choiceIds.length}
           placeholder="Correct answer"
           className={styles.correct_answer_input}
         />
-        <Button title="add choice" action={incrementNumberOfChoices} />
+        <Button title="add choice" action={saveNewId} />
       </div>
     </div>
   );

@@ -3,15 +3,26 @@ import { BASE_API_URL } from "../config";
 import getRefreshedTokens from "./get-refreshed-tokens";
 
 interface QuizInfo {
-  title: string;
-  startTime: number;
-  endTime: number;
+  quizInfo: {
+    id: string;
+    password: string;
+    startTime: number;
+    endTime: number;
+    title: string;
+    createdBy: string;
+  };
 }
 
-export default async function saveQuizInfo(info: QuizInfo) {
-  const apiUrl = BASE_API_URL + "/quiz/save-info";
+export default async function getQuizInfo() {
+  const apiUrl = BASE_API_URL + "/quiz/get-info";
 
-  const sendRequest = async () => axios.post(apiUrl, info);
+  const quizToken = localStorage.getItem("QUIZ_TOKEN");
+
+  if (!quizToken) {
+    return;
+  }
+
+  const sendRequest = () => axios.post<QuizInfo>(apiUrl, { token: quizToken });
 
   try {
     return await sendRequest();
