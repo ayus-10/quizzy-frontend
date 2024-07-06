@@ -85,7 +85,7 @@
   z-index: 15;
   height: auto;
   min-width: 400px;
-  background-color: var(--gray);
+  background-color: white;
   border-radius: 6px;
   transform: translate(-50%, -50%);
   top: 50%;

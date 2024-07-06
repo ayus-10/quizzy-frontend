@@ -26,13 +26,18 @@ export default function Create() {
     setQuestionIds((prev) => [...prev, newId]);
   }
 
+  function cancelQuizCreation() {
+    localStorage.removeItem("QUIZ_TOKEN");
+    setCreationStage("initial");
+  }
+
   switch (creationStage) {
     case "initial":
       return <QuizInfoForm setStage={setCreationStage} />;
     case "final":
       return (
         <div className={styles.container}>
-          <h1 className={styles.title}>TITLE: {quizTitle}</h1>
+          <h1 className={styles.title}>TITLE: {quizTitle || "loading..."}</h1>
           <div className={styles.questions}>
             {questionIds.map((id, index) => (
               <QuestionInput key={id} questionNumber={index + 1} />
@@ -40,7 +45,14 @@ export default function Create() {
           </div>
           <div className={styles.options}>
             <Button title="Add question" action={saveNewId} />
-            <Button title="Done" />
+            <div className={styles.options}>
+              <Button
+                title="Cancel"
+                action={cancelQuizCreation}
+                secondaryColor
+              />
+              <Button title="Submit" />
+            </div>
           </div>
         </div>
       );

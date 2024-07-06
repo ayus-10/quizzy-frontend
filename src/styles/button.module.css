@@ -1,7 +1,6 @@
 .button {
-  color: white;
   border: 0;
-  background-color: var(--red-2);
+  font-size: 18px;
   padding: 6px 12px;
   cursor: pointer;
   border-radius: 4px;
@@ -9,11 +8,29 @@
   text-transform: capitalize;
 }
 
-.button:hover {
+.button:active {
+  transform: scale(95%);
+}
+
+.large_font {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.primary {
   color: white;
+  background-color: var(--red-2);
+}
+
+.primary:hover {
   background-color: var(--red-3);
 }
 
-.button:active {
-  transform: scale(95%);
+.secondary {
+  color: var(--black);
+  background-color: var(--gray-slight-dark);
+}
+
+.secondary:hover {
+  background-color: var(--gray-dark);
 }

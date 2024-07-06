@@ -22,8 +22,14 @@ export default function QuestionInput(props: QuestionInputProps) {
   return (
     <div className={styles.container}>
       <div className={`${styles.question_input_div} ${styles.input_div}`}>
-        <label htmlFor="questionInput">Question {questionNumber}</label>
-        <input type="text" id="questionInput" placeholder="Question here..." />
+        <label htmlFor={`questionInput${questionNumber}`}>
+          Question {questionNumber}
+        </label>
+        <input
+          type="text"
+          id={`questionInput${questionNumber}`}
+          placeholder="Question here..."
+        />
       </div>
       <div className={styles.answer_container}>
         {choiceIds.map((id, index) => (
@@ -33,7 +39,7 @@ export default function QuestionInput(props: QuestionInputProps) {
           >
             <input
               type="text"
-              id="questionInput"
+              id={`answerInput${questionNumber}`}
               placeholder="Answer choice here..."
             />
             <span className={styles.count}>{index + 1}</span>
@@ -45,6 +51,7 @@ export default function QuestionInput(props: QuestionInputProps) {
           type="number"
           min={1}
           max={choiceIds.length}
+          id={`correctChoice${questionNumber}`}
           placeholder="Correct answer"
           className={styles.correct_answer_input}
         />

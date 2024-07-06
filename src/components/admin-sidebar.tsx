@@ -99,7 +99,7 @@ export default function AdminSidebar(props: AdminSidebarProps) {
             <div className={styles.confirm}>
               <p>Are you sure you want to log out?</p>
               <div className={styles.buttons}>
-                <Button title="Yes" action={handleLogout} />
+                <Button title="Yes" action={handleLogout} secondaryColor />
                 <Button title="No" action={() => setShowLogoutPopup(false)} />
               </div>
             </div>

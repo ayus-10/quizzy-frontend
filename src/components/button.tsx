@@ -4,18 +4,18 @@ type ButtonProps = {
   action?: () => void;
   title: string;
   largeFont?: boolean;
+  secondaryColor?: boolean;
 };
 
 export default function Button(props: ButtonProps) {
-  const { action, title, largeFont } = props;
+  const { action, title, largeFont, secondaryColor } = props;
 
   return (
     <button
       onClick={action}
-      className={styles.button}
-      style={
-        largeFont ? { fontSize: "22px", fontWeight: 600 } : { fontSize: "18px" }
-      }
+      className={`${styles.button} ${largeFont && styles.large_font} ${
+        secondaryColor ? styles.secondary : styles.primary
+      }`}
     >
       {title}
     </button>
