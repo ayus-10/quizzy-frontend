@@ -1,6 +1,6 @@
 import { FormEvent, SetStateAction, useRef, Dispatch } from "react";
 import saveQuizInfo from "../utils/save-quiz-info";
-import axios from "axios";
+import { AxiosError } from "axios";
 import Button from "./button";
 import styles from "../styles/quiz-info-form.module.css";
 import { CreationStage } from "../routes/admin/create";
@@ -43,17 +43,19 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
       endTime: getUTCTimeStamp(endTime),
     };
 
-    const res = await saveQuizInfo(quizInfo);
-    if (res) {
-      if (axios.isAxiosError(res)) {
-        dispatch(
-          setAlertMessage({ message: res.response?.data, status: "error" })
-        );
-      } else {
-        setAlertMessage({ message: res.data, status: "success" });
+    saveQuizInfo(quizInfo)
+      .then((res) => {
+        dispatch(setAlertMessage({ message: res?.data, status: "success" }));
         setStage("final");
-      }
-    }
+      })
+      .catch((err: AxiosError) =>
+        dispatch(
+          setAlertMessage({
+            message: err.response?.data as string,
+            status: "error",
+          })
+        )
+      );
   }
 
   return (

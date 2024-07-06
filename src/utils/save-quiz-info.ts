@@ -16,20 +16,19 @@ export default async function saveQuizInfo(info: QuizInfo) {
   try {
     return await sendRequest();
   } catch (err) {
-    if (!axios.isAxiosError(err)) {
-      return;
-    }
-    if (err.response?.status === 403) {
-      await getRefreshedTokens();
-      try {
-        return await sendRequest();
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          return err;
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status === 403) {
+        await getRefreshedTokens();
+        try {
+          return await sendRequest();
+        } catch (err) {
+          if (axios.isAxiosError(err)) {
+            throw err;
+          }
         }
+      } else if (err.response?.status === 400) {
+        throw err;
       }
-    } else if (err.response?.status === 400) {
-      return err;
     }
   }
 }
