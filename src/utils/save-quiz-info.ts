@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
-import getRefreshedTokens from "./get-refreshed-tokens";
+import handleQuizInfo from "./handle-quiz-info";
 
 interface QuizInfo {
   title: string;
@@ -11,24 +11,11 @@ interface QuizInfo {
 export default async function saveQuizInfo(info: QuizInfo) {
   const apiUrl = BASE_API_URL + "/quiz/save-info";
 
-  const sendRequest = async () => axios.post(apiUrl, info);
+  const saveQuizInfoRequest = async () => axios.post(apiUrl, info);
 
   try {
-    return await sendRequest();
+    return await handleQuizInfo(saveQuizInfoRequest);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
-      if (err.response?.status === 403) {
-        await getRefreshedTokens();
-        try {
-          return await sendRequest();
-        } catch (err) {
-          if (axios.isAxiosError(err)) {
-            throw err;
-          }
-        }
-      } else if (err.response?.status === 400) {
-        throw err;
-      }
-    }
+    throw err;
   }
 }
