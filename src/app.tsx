@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./routes/home";
-import Login from "./routes/login";
-import Register from "./routes/register";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Register from "./pages/register";
 import axios from "axios";
-import Admin from "./routes/admin";
-import Create from "./routes/admin/create";
-import Manage from "./routes/admin/manage";
-import Result from "./routes/admin/result";
+import Admin from "./pages/admin";
+import Create from "./pages/admin/create";
+import Manage from "./pages/admin/manage";
+import Result from "./pages/admin/result";
 import AlertMessage from "./components/alert-message";
 
 export default function App() {

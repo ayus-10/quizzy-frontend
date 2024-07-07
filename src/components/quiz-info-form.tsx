@@ -3,7 +3,7 @@ import saveQuizInfo from "../utils/save-quiz-info";
 import { AxiosError } from "axios";
 import Button from "./button";
 import styles from "../styles/quiz-info-form.module.css";
-import { CreationStage } from "../routes/admin/create";
+import { CreationStage } from "../pages/admin/create";
 import { useAppDispatch } from "../redux/hooks";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
 
