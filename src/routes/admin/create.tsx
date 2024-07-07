@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import QuizInfoForm from "../../components/quiz-info-form";
 import QuestionInput from "../../components/question-input";
@@ -14,6 +14,8 @@ export default function Create() {
   const [questionIds, setQuestionIds] = useState<string[]>([]);
 
   const [quizTitle, setQuizTitle] = useState("");
+
+  const questionsForm = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     saveNewId();
@@ -31,14 +33,42 @@ export default function Create() {
     setCreationStage("initial");
   }
 
+  function handleFormSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    const questionInputs = (
+      questionsForm.current?.querySelector("#allQuestions") as Element
+    ).children;
+
+    Array.from(questionInputs).forEach((questionInput) => {
+      const question = (
+        questionInput.querySelector(".questionInput") as HTMLInputElement
+      ).value;
+      const answerChoices: string[] = [];
+      const answerInputs = questionInput.querySelectorAll(".answerInputs");
+      answerInputs.forEach((answerInput) => {
+        answerChoices.push((answerInput as HTMLInputElement).value);
+      });
+      const correctChoice = (
+        questionInput.querySelector(".correctChoice") as HTMLInputElement
+      ).value;
+      const questionItem = { question, answerChoices, correctChoice };
+      console.log(questionItem);
+    });
+  }
+
   switch (creationStage) {
     case "initial":
       return <QuizInfoForm setStage={setCreationStage} />;
     case "final":
       return (
-        <div className={styles.container}>
+        <form
+          className={styles.container}
+          onSubmit={handleFormSubmit}
+          ref={questionsForm}
+        >
           <h1 className={styles.title}>TITLE: {quizTitle || "loading..."}</h1>
-          <div className={styles.questions}>
+          <div className={styles.questions} id="allQuestions">
             {questionIds.map((id, index) => (
               <QuestionInput key={id} questionNumber={index + 1} />
             ))}
@@ -51,10 +81,10 @@ export default function Create() {
                 action={cancelQuizCreation}
                 secondaryColor
               />
-              <Button title="Submit" />
+              <Button title="Submit" submitForm />
             </div>
           </div>
-        </div>
+        </form>
       );
   }
 }

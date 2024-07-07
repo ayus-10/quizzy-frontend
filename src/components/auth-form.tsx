@@ -60,7 +60,11 @@ export default function AuthForm(props: AuthFormProps) {
           />
         </div>
         <div className={styles.center}>
-          {loading ? <BeatLoader color="#f43f5e" /> : <Button title={action} />}
+          {loading ? (
+            <BeatLoader color="#f43f5e" />
+          ) : (
+            <Button title={action} submitForm />
+          )}
         </div>
       </form>
       <div className={styles.center}>

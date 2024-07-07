@@ -28,6 +28,7 @@ export default function QuestionInput(props: QuestionInputProps) {
         <input
           type="text"
           id={`questionInput${questionNumber}`}
+          className="questionInput"
           placeholder="Question here..."
         />
       </div>
@@ -39,7 +40,8 @@ export default function QuestionInput(props: QuestionInputProps) {
           >
             <input
               type="text"
-              id={`answerInput${questionNumber}`}
+              id={`answerInput${questionNumber}_${index + 1}`}
+              className="answerInputs"
               placeholder="Answer choice here..."
             />
             <span className={styles.count}>{index + 1}</span>
@@ -47,14 +49,16 @@ export default function QuestionInput(props: QuestionInputProps) {
         ))}
       </div>
       <div className={styles.options}>
-        <input
-          type="number"
-          min={1}
-          max={choiceIds.length}
-          id={`correctChoice${questionNumber}`}
-          placeholder="Correct answer"
-          className={styles.correct_answer_input}
-        />
+        <div className={styles.correct_answer_input_div}>
+          <input
+            type="number"
+            min={1}
+            max={choiceIds.length}
+            id={`correctChoice${questionNumber}`}
+            className="correctChoice"
+            placeholder="Correct answer"
+          />
+        </div>
         <Button title="add choice" action={saveNewId} />
       </div>
     </div>

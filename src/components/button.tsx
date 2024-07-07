@@ -5,10 +5,11 @@ type ButtonProps = {
   title: string;
   largeFont?: boolean;
   secondaryColor?: boolean;
+  submitForm?: boolean;
 };
 
 export default function Button(props: ButtonProps) {
-  const { action, title, largeFont, secondaryColor } = props;
+  const { action, title, largeFont, secondaryColor, submitForm } = props;
 
   return (
     <button
@@ -16,6 +17,7 @@ export default function Button(props: ButtonProps) {
       className={`${styles.button} ${largeFont && styles.large_font} ${
         secondaryColor ? styles.secondary : styles.primary
       }`}
+      type={submitForm ? "submit" : "button"}
     >
       {title}
     </button>

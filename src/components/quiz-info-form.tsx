@@ -99,7 +99,7 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
           </div>
         </div>
         <div className={styles.button_div}>
-          <Button title="Save" />
+          <Button title="Save" submitForm />
         </div>
       </form>
     </div>
