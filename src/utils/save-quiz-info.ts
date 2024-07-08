@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
-import handleQuizInfo from "./handle-quiz-info";
+import handleQuizRequests from "./handle-quiz-requests";
 
 interface QuizInfo {
   title: string;
@@ -14,7 +14,7 @@ export default async function saveQuizInfo(info: QuizInfo) {
   const saveQuizInfoRequest = async () => axios.post(apiUrl, info);
 
   try {
-    return await handleQuizInfo(saveQuizInfoRequest);
+    return await handleQuizRequests(saveQuizInfoRequest);
   } catch (err) {
     throw err;
   }

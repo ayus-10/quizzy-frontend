@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import getRefreshedTokens from "./get-refreshed-tokens";
 
-export default async function handleQuizInfo(
+export default async function handleQuizRequests(
   sendRequest: () => Promise<AxiosResponse<any, any>>
 ) {
   try {

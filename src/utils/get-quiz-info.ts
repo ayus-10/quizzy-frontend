@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
-import handleQuizInfo from "./handle-quiz-info";
+import handleQuizRequests from "./handle-quiz-requests";
 
 interface FetchedQuizInfo {
   quizInfo: {
@@ -22,7 +22,7 @@ export default async function getQuizInfo() {
     axios.post<FetchedQuizInfo>(apiUrl, { token: quizToken });
 
   try {
-    return await handleQuizInfo(getQuizInfoRequest);
+    return await handleQuizRequests(getQuizInfoRequest);
   } catch (err) {
     throw err;
   }

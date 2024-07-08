@@ -5,8 +5,18 @@ import QuestionInput from "../../components/question-input";
 import styles from "../../styles/create.module.css";
 import Button from "../../components/button";
 import getQuizInfo from "../../utils/get-quiz-info";
+import saveQuizQuestions from "../../utils/save-quiz-questions";
+import { useAppDispatch } from "../../redux/hooks";
+import { setAlertMessage } from "../../redux/slices/alert-message.slice";
+import axios from "axios";
 
 export type CreationStage = "initial" | "final";
+
+export interface QuizQuestion {
+  question: string;
+  answerChoices: string[];
+  correctChoice: number;
+}
 
 export default function Create() {
   const [creationStage, setCreationStage] = useState<CreationStage>("initial");
@@ -16,6 +26,8 @@ export default function Create() {
   const [quizTitle, setQuizTitle] = useState("");
 
   const questionsForm = useRef<HTMLFormElement>(null);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     saveNewId();
@@ -33,12 +45,14 @@ export default function Create() {
     setCreationStage("initial");
   }
 
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
 
     const questionInputs = (
       questionsForm.current?.querySelector("#allQuestions") as Element
     ).children;
+
+    const quizQuestions: QuizQuestion[] = [];
 
     Array.from(questionInputs).forEach((questionInput) => {
       const question = (
@@ -49,12 +63,28 @@ export default function Create() {
       answerInputs.forEach((answerInput) => {
         answerChoices.push((answerInput as HTMLInputElement).value);
       });
-      const correctChoice = (
-        questionInput.querySelector(".correctChoice") as HTMLInputElement
-      ).value;
-      const questionItem = { question, answerChoices, correctChoice };
-      console.log(questionItem);
+      const correctChoice = parseInt(
+        (questionInput.querySelector(".correctChoice") as HTMLInputElement)
+          .value
+      );
+      const quizQuestion = { question, answerChoices, correctChoice };
+      quizQuestions.push(quizQuestion);
     });
+
+    try {
+      const res = await saveQuizQuestions(quizQuestions);
+      dispatch(setAlertMessage({ message: res?.data, status: "success" }));
+      localStorage.removeItem("QUIZ_TOKEN");
+      setCreationStage("initial");
+    } catch (err) {
+      if (axios.isAxiosError(err))
+        dispatch(
+          setAlertMessage({
+            message: err.response?.data,
+            status: "error",
+          })
+        );
+    }
   }
 
   switch (creationStage) {
