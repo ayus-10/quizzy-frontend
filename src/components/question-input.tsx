@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import styles from "../styles/question-input.module.css";
 import Button from "./button";
 import { v4 as uuid } from "uuid";
+import { IoIosClose } from "react-icons/io";
 
 type QuestionInputProps = {
   questionNumber: number;
+  questionId: string;
+  removeQuestion: (id: string) => void;
 };
 
 export default function QuestionInput(props: QuestionInputProps) {
-  const { questionNumber } = props;
+  const { questionNumber, questionId, removeQuestion } = props;
 
   const [choiceIds, setChoiceIds] = useState<string[]>([]);
 
@@ -16,21 +19,34 @@ export default function QuestionInput(props: QuestionInputProps) {
 
   function saveNewId() {
     const newId = uuid();
+    if (choiceIds.length >= 8) {
+      return;
+    }
     setChoiceIds((prev) => [...prev, newId]);
+  }
+
+  function removeChoice(idToBeRemoved: string) {
+    if (choiceIds.length <= 2) {
+      return;
+    }
+    setChoiceIds((prev) => prev.filter((id) => id !== idToBeRemoved));
   }
 
   return (
     <div className={styles.container}>
       <div className={`${styles.question_input_div} ${styles.input_div}`}>
-        <label htmlFor={`questionInput${questionNumber}`}>
-          Question {questionNumber}
-        </label>
+        <span>Question {questionNumber}</span>
         <input
           type="text"
           id={`questionInput${questionNumber}`}
           className="questionInput"
           placeholder="Question here..."
         />
+        <div className={styles.question_remove_button}>
+          <Button title="remove" action={() => removeQuestion(questionId)}>
+            <IoIosClose />
+          </Button>
+        </div>
       </div>
       <div className={styles.answer_container}>
         {choiceIds.map((id, index) => (
@@ -45,6 +61,11 @@ export default function QuestionInput(props: QuestionInputProps) {
               placeholder="Answer choice here..."
             />
             <span className={styles.count}>{index + 1}</span>
+            <div className={styles.choice_remove_button}>
+              <Button title="remove" action={() => removeChoice(id)}>
+                <IoIosClose />
+              </Button>
+            </div>
           </div>
         ))}
       </div>
@@ -56,7 +77,7 @@ export default function QuestionInput(props: QuestionInputProps) {
             max={choiceIds.length}
             id={`correctChoice${questionNumber}`}
             className="correctChoice"
-            placeholder="Correct answer"
+            placeholder="Correct choice..."
           />
         </div>
         <Button title="add choice" action={saveNewId} />

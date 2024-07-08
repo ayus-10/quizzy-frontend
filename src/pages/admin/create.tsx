@@ -9,6 +9,7 @@ import saveQuizQuestions from "../../utils/save-quiz-questions";
 import { useAppDispatch } from "../../redux/hooks";
 import { setAlertMessage } from "../../redux/slices/alert-message.slice";
 import axios from "axios";
+import { BeatLoader } from "react-spinners";
 
 export type CreationStage = "initial" | "final";
 
@@ -25,6 +26,8 @@ export default function Create() {
 
   const [quizTitle, setQuizTitle] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const questionsForm = useRef<HTMLFormElement>(null);
 
   const dispatch = useAppDispatch();
@@ -40,12 +43,21 @@ export default function Create() {
     setQuestionIds((prev) => [...prev, newId]);
   }
 
+  function removeQuestion(idToBeRemoved: string) {
+    if (questionIds.length <= 2) {
+      return;
+    }
+    setQuestionIds((prev) => prev.filter((id) => id !== idToBeRemoved));
+  }
+
   function cancelQuizCreation() {
     localStorage.removeItem("QUIZ_TOKEN");
     setCreationStage("initial");
   }
 
   async function handleFormSubmit(e: FormEvent) {
+    setLoading(true);
+
     e.preventDefault();
 
     const questionInputs = (
@@ -84,6 +96,8 @@ export default function Create() {
             status: "error",
           })
         );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -100,10 +114,15 @@ export default function Create() {
           <h1 className={styles.title}>TITLE: {quizTitle || "loading..."}</h1>
           <div className={styles.questions} id="allQuestions">
             {questionIds.map((id, index) => (
-              <QuestionInput key={id} questionNumber={index + 1} />
+              <QuestionInput
+                key={id}
+                questionNumber={index + 1}
+                questionId={id}
+                removeQuestion={removeQuestion}
+              />
             ))}
           </div>
-          <div className={styles.options}>
+          <div className={`${styles.options} ${styles.options_div}`}>
             <Button title="Add question" action={saveNewId} />
             <div className={styles.options}>
               <Button
@@ -111,7 +130,9 @@ export default function Create() {
                 action={cancelQuizCreation}
                 secondaryColor
               />
-              <Button title="Submit" submitForm />
+              <Button title="Submit" submitForm>
+                {loading ? <BeatLoader color="#fff" /> : undefined}
+              </Button>
             </div>
           </div>
         </form>

@@ -18,8 +18,11 @@
   overflow-y: scroll;
 }
 
-.options {
+.options_div {
   margin-top: 30px;
+}
+
+.options {
   display: flex;
   gap: 10px;
   justify-content: space-between;

@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import styles from "../styles/button.module.css";
 
 type ButtonProps = {
@@ -6,10 +7,12 @@ type ButtonProps = {
   largeFont?: boolean;
   secondaryColor?: boolean;
   submitForm?: boolean;
+  children?: ReactNode;
 };
 
 export default function Button(props: ButtonProps) {
-  const { action, title, largeFont, secondaryColor, submitForm } = props;
+  const { action, title, largeFont, secondaryColor, submitForm, children } =
+    props;
 
   return (
     <button
@@ -19,7 +22,7 @@ export default function Button(props: ButtonProps) {
       }`}
       type={submitForm ? "submit" : "button"}
     >
-      {title}
+      {children ? children : title}
     </button>
   );
 }
