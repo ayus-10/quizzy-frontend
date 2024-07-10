@@ -4,7 +4,7 @@ import { QuizQuestion } from "../pages/admin/create";
 import handleQuizRequests from "./handle-quiz-requests";
 
 export default async function saveQuizQuestions(quizQuestions: QuizQuestion[]) {
-  const apiUrl = BASE_API_URL + "/quiz/save-questions";
+  const apiUrl = BASE_API_URL + "/quiz/questions";
 
   const quizToken = localStorage.getItem("QUIZ_TOKEN");
 

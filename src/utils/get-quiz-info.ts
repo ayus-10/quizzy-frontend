@@ -14,12 +14,13 @@ interface FetchedQuizInfo {
 }
 
 export default async function getQuizInfo() {
-  const apiUrl = BASE_API_URL + "/quiz/get-info";
-
   const quizToken = localStorage.getItem("QUIZ_TOKEN");
 
-  const getQuizInfoRequest = () =>
-    axios.post<FetchedQuizInfo>(apiUrl, { token: quizToken });
+  if (!quizToken) return;
+
+  const apiUrl = BASE_API_URL + "/quiz/info/" + quizToken;
+
+  const getQuizInfoRequest = () => axios.get<FetchedQuizInfo>(apiUrl);
 
   try {
     return await handleQuizRequests(getQuizInfoRequest);
