@@ -31,3 +31,9 @@
 .options > button {
   height: 44px;
 }
+
+@media screen and (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
+}

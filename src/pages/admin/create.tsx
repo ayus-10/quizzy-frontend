@@ -10,14 +10,9 @@ import { useAppDispatch } from "../../redux/hooks";
 import { setAlertMessage } from "../../redux/slices/alert-message.slice";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
+import { QuizQuestion } from "../../interfaces/quiz-question.interface";
 
 export type CreationStage = "initial" | "final";
-
-export interface QuizQuestion {
-  question: string;
-  answerChoices: string[];
-  correctChoice: number;
-}
 
 export default function Create() {
   const [creationStage, setCreationStage] = useState<CreationStage>("initial");
@@ -35,7 +30,12 @@ export default function Create() {
   useEffect(() => {
     saveNewId();
 
-    getQuizInfo().then((res) => setQuizTitle(String(res?.data.quizInfo.title)));
+    async function fetchQuizTitle() {
+      const res = await getQuizInfo();
+      setQuizTitle(res?.data.title);
+    }
+
+    fetchQuizTitle();
   }, []);
 
   function saveNewId() {
@@ -111,7 +111,7 @@ export default function Create() {
           onSubmit={handleFormSubmit}
           ref={questionsForm}
         >
-          <h1 className={styles.title}>TITLE: {quizTitle || "loading..."}</h1>
+          <h1 className={styles.title}>{quizTitle || "loading..."}</h1>
           <div className={styles.questions} id="allQuestions">
             {questionIds.map((id, index) => (
               <QuestionInput

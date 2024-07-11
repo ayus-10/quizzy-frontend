@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
-import { QuizQuestion } from "../pages/admin/create";
+import { QuizQuestion } from "../interfaces/quiz-question.interface";
 import handleQuizRequests from "./handle-quiz-requests";
 
 export default async function saveQuizQuestions(quizQuestions: QuizQuestion[]) {

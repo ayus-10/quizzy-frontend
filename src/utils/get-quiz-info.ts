@@ -1,17 +1,7 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
 import handleQuizRequests from "./handle-quiz-requests";
-
-interface FetchedQuizInfo {
-  quizInfo: {
-    id: string;
-    password: string;
-    startTime: number;
-    endTime: number;
-    title: string;
-    createdBy: string;
-  };
-}
+import { FetchedQuizInfo } from "../interfaces/fetched-quiz-info.interface";
 
 export default async function getQuizInfo() {
   const quizToken = localStorage.getItem("QUIZ_TOKEN");

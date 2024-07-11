@@ -47,6 +47,10 @@
 }
 
 @media screen and (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
+
   .date_input_div {
     flex-direction: column;
   }
