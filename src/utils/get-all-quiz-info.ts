@@ -8,7 +8,7 @@ interface AllQuizInfo {
 }
 
 export default async function getAllQuizInfo() {
-  const apiUrl = BASE_API_URL + "/quiz/info";
+  const apiUrl = `${BASE_API_URL}/quiz/info`;
 
   const getAllQuizInfoRequest = () => axios.get<AllQuizInfo>(apiUrl);
 

@@ -7,7 +7,7 @@ interface AuthenticatedUser {
 }
 
 export default async function getAuthenticatedUser() {
-  const apiUrl = BASE_API_URL + "/auth/user";
+  const apiUrl = `${BASE_API_URL}/auth/user`;
 
   const sendRequest = async () => axios.get<AuthenticatedUser>(apiUrl);
 

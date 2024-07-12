@@ -13,7 +13,7 @@ export default function Login() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiUrl = BASE_API_URL + "/users/login";
+  const apiUrl = `${BASE_API_URL}/users/login`;
 
   const navigate = useNavigate();
 

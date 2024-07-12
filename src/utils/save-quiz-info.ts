@@ -9,7 +9,7 @@ interface QuizInfo {
 }
 
 export default async function saveQuizInfo(info: QuizInfo) {
-  const apiUrl = BASE_API_URL + "/quiz/info";
+  const apiUrl = `${BASE_API_URL}/quiz/info`;
 
   const saveQuizInfoRequest = async () => axios.post(apiUrl, info);
 

@@ -13,7 +13,7 @@ export default function Register() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiUrl = BASE_API_URL + "/users/register";
+  const apiUrl = `${BASE_API_URL}/users/register`;
 
   const navigate = useNavigate();
 

@@ -8,7 +8,7 @@ export default async function getQuizInfo() {
 
   if (!quizToken) return;
 
-  const apiUrl = BASE_API_URL + "/quiz/info/" + quizToken;
+  const apiUrl = `${BASE_API_URL}/quiz/info/${quizToken}`;
 
   const getQuizInfoRequest = () => axios.get<FetchedQuizInfo>(apiUrl);
 

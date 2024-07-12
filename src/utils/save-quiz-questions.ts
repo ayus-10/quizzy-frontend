@@ -4,12 +4,11 @@ import { QuizQuestion } from "../interfaces/quiz-question.interface";
 import handleQuizRequests from "./handle-quiz-requests";
 
 export default async function saveQuizQuestions(quizQuestions: QuizQuestion[]) {
-  const apiUrl = BASE_API_URL + "/quiz/questions";
-
   const quizToken = localStorage.getItem("QUIZ_TOKEN");
 
-  const saveQuizQuestionsRequest = () =>
-    axios.post(apiUrl, { quizToken, quizQuestions });
+  const apiUrl = `${BASE_API_URL}/quiz/questions/${quizToken}`;
+
+  const saveQuizQuestionsRequest = () => axios.post(apiUrl, { quizQuestions });
 
   try {
     return await handleQuizRequests(saveQuizQuestionsRequest);
