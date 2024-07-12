@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding: 30px;
+  padding: 36px;
   flex-grow: 1;
 }
 
@@ -27,36 +27,33 @@
   background-color: white;
 }
 
-.table_container {
+.grid_container {
   width: 100%;
   max-height: 100%;
   overflow-x: auto;
   overflow-y: auto;
 }
 
-.info_table {
+.grid_body {
   width: 100%;
   overflow-x: auto;
-  white-space: nowrap;
-  border-collapse: collapse;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  position: relative;
 }
 
-.info_table thead,
-.info_table td {
-  padding: 10px;
-  border: 1px solid white;
-  text-align: left;
-  font-size: 18px;
-}
-
-.info_table tbody {
-  background-color: var(--gray);
-}
-
-.info_table thead {
-  font-weight: bold;
-  color: white;
+.heading_cell {
   background-color: var(--red-2);
+  color: white;
+  border: 1px solid white;
+  padding: 10px;
+}
+
+.cell {
+  background-color: var(--gray);
+  border: 1px solid white;
+  color: var(--black);
+  padding: 10px;
 }
 
 .action_button {
@@ -86,5 +83,9 @@
 @media screen and (max-width: 480px) {
   .title {
     font-size: 28px;
+  }
+
+  .grid_container {
+    max-width: calc(100vw - 72px);
   }
 }

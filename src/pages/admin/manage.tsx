@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import getAllQuizInfo from "../../utils/get-all-quiz-info";
 import styles from "../../styles/manage.module.css";
 import { FetchedQuizInfo } from "../../interfaces/fetched-quiz-info.interface";
@@ -54,44 +54,40 @@ export default function Manage() {
         placeholder="Search by title..."
         onChange={(e) => setSearch(e.target.value)}
       />
-      <div className={styles.table_container}>
-        <table className={styles.info_table}>
-          <thead>
-            <tr>
-              <td>S.N.</td>
-              <td>Title</td>
-              <td>Starts</td>
-              <td>Ends</td>
-              <td>Duration</td>
-              <td>ID</td>
-              <td>Password</td>
-              <td>Action</td>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredQuizInfo.map((info, index) => (
-              <tr key={info.id}>
-                <td>{index + 1}</td>
-                <td>{info.title}</td>
-                <td>{formattedTime(info.startTime)}</td>
-                <td>{formattedTime(info.endTime)}</td>
-                <td>{durationBetween(info.startTime, info.endTime)}</td>
-                <td>{info.id}</td>
-                <td>{info.password}</td>
-                <td>
-                  <button className={styles.action_button}>
-                    <TbEditCircle />
-                    <span>Edit</span>
-                  </button>
-                  <button className={styles.action_button}>
-                    <HiOutlineTrash />
-                    <span>Delete</span>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className={styles.grid_container}>
+        <div className={styles.grid_body}>
+          <div className={styles.heading_cell}>S.N.</div>
+          <div className={styles.heading_cell}>Title</div>
+          <div className={styles.heading_cell}>ID</div>
+          <div className={styles.heading_cell}>Password</div>
+          <div className={styles.heading_cell}>Starts</div>
+          <div className={styles.heading_cell}>Ends</div>
+          <div className={styles.heading_cell}>Duration</div>
+          <div className={styles.heading_cell}>Action</div>
+          {filteredQuizInfo.map((info, index) => (
+            <Fragment key={info.id}>
+              <div className={styles.cell}>{index + 1}</div>
+              <div className={styles.cell}>{info.title}</div>
+              <div className={styles.cell}>{info.id}</div>
+              <div className={styles.cell}>{info.password}</div>
+              <div className={styles.cell}>{formattedTime(info.startTime)}</div>
+              <div className={styles.cell}>{formattedTime(info.endTime)}</div>
+              <div className={styles.cell}>
+                {durationBetween(info.startTime, info.endTime)}
+              </div>
+              <div className={styles.cell}>
+                <button className={styles.action_button}>
+                  <TbEditCircle />
+                  <span>Edit</span>
+                </button>
+                <button className={styles.action_button}>
+                  <HiOutlineTrash />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
