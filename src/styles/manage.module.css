@@ -74,6 +74,14 @@
   text-decoration: underline;
 }
 
+.grid_container > p {
+  border: 1px solid white;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  background-color: var(--gray);
+}
+
 @media screen and (min-width: 481px) {
   .container {
     width: calc(100vw - 400px);

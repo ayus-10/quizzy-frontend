@@ -117,6 +117,7 @@ export default function Manage() {
             </Fragment>
           ))}
         </div>
+        {filteredQuizInfo.length == 0 && <p>No data found.</p>}
       </div>
     </div>
   );
