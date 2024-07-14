@@ -23,9 +23,9 @@ export default function AdminSidebar(props: AdminSidebarProps) {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const navLinks = [
-    { title: "create", path: "/admin/create" },
-    { title: "manage", path: "/admin/manage" },
-    { title: "result", path: "/admin/result" },
+    { title: "create", path: "/create" },
+    { title: "manage", path: "/manage" },
+    { title: "result", path: "/result" },
   ];
 
   const location = useLocation();

@@ -4,9 +4,9 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import axios from "axios";
 import Admin from "./pages/admin";
-import Create from "./pages/admin/create";
-import Manage from "./pages/admin/manage";
-import Result from "./pages/admin/result";
+import Create from "./pages/create";
+import Manage from "./pages/manage";
+import Result from "./pages/result";
 import AlertMessage from "./components/alert-message";
 
 export default function App() {

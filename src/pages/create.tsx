@@ -1,16 +1,16 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
-import QuizInfoForm from "../../components/quiz-info-form";
-import QuestionInput from "../../components/question-input";
-import styles from "../../styles/create.module.css";
-import Button from "../../components/button";
-import getQuizInfo from "../../utils/get-quiz-info";
-import saveQuizQuestions from "../../utils/save-quiz-questions";
-import { useAppDispatch } from "../../redux/hooks";
-import { setAlertMessage } from "../../redux/slices/alert-message.slice";
+import QuizInfoForm from "../components/quiz-info-form";
+import QuestionInput from "../components/question-input";
+import styles from "../styles/create.module.css";
+import Button from "../components/button";
+import getQuizInfo from "../utils/get-quiz-info";
+import saveQuizQuestions from "../utils/save-quiz-questions";
+import { useAppDispatch } from "../redux/hooks";
+import { setAlertMessage } from "../redux/slices/alert-message.slice";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
-import { QuizQuestion } from "../../interfaces/quiz-question.interface";
+import { QuizQuestion } from "../interfaces/quiz-question.interface";
 
 export type CreationStage = "initial" | "final";
 

@@ -1,9 +1,13 @@
 import { useEffect, useState, Fragment } from "react";
-import getAllQuizInfo from "../../utils/get-all-quiz-info";
-import styles from "../../styles/manage.module.css";
-import { FetchedQuizInfo } from "../../interfaces/fetched-quiz-info.interface";
+import getAllQuizInfo from "../utils/get-all-quiz-info";
+import styles from "../styles/manage.module.css";
+import { FetchedQuizInfo } from "../interfaces/fetched-quiz-info.interface";
 import { TbEditCircle } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi2";
+import { useAppDispatch } from "../redux/hooks";
+import { setAlertMessage } from "../redux/slices/alert-message.slice";
+import { useNavigate } from "react-router-dom";
+import deleteQuiz from "../utils/delete-quiz";
 
 export default function Manage() {
   const [allQuizInfo, setAllQuizInfo] = useState<FetchedQuizInfo[]>([]);
@@ -13,6 +17,12 @@ export default function Manage() {
   );
 
   const [search, setSearch] = useState("");
+
+  const [quizIdToBeDeleted, setQuizIdToBeDeleted] = useState("");
+
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchAllQuizInfo() {
@@ -29,6 +39,22 @@ export default function Manage() {
       return allQuizInfo.filter((info) => info.title.includes(search));
     });
   }, [search]);
+
+  async function handleQuizDeletion(id: string) {
+    if (id !== quizIdToBeDeleted) {
+      setQuizIdToBeDeleted(id);
+      dispatch(
+        setAlertMessage({
+          message: "Click on delete again to confirm",
+          status: "warning",
+        })
+      );
+    } else {
+      const res = await deleteQuiz(id);
+      dispatch(setAlertMessage({ message: res?.data, status: "success" }));
+      navigate("/create");
+    }
+  }
 
   function formattedTime(timestamp: number) {
     const dateTime = new Date(timestamp);
@@ -80,7 +106,10 @@ export default function Manage() {
                   <TbEditCircle />
                   <span>Edit</span>
                 </button>
-                <button className={styles.action_button}>
+                <button
+                  className={styles.action_button}
+                  onClick={() => handleQuizDeletion(info.id)}
+                >
                   <HiOutlineTrash />
                   <span>Delete</span>
                 </button>

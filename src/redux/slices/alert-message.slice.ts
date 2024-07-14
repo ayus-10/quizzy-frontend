@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface AlertMessage {
-  status: "success" | "error" | null;
+  status: "success" | "error" | "warning" | null;
   message: string | null;
 }
 

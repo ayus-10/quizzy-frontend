@@ -5,6 +5,7 @@ import {
   IoCheckmarkCircleOutline,
   IoCloseCircleOutline,
 } from "react-icons/io5";
+import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
 
 export default function AlertMessage() {
@@ -26,20 +27,29 @@ export default function AlertMessage() {
     return () => clearTimeout(timeoutId);
   }, [message, status]);
 
+  function alertIcon() {
+    switch (status) {
+      case "success":
+        return <IoCheckmarkCircleOutline />;
+      case "error":
+        return <IoCloseCircleOutline />;
+      case "warning":
+        return <HiOutlineExclamationCircle />;
+    }
+  }
+
   if (message && status)
     return (
       <div
         className={`${styles.alert_message} ${
-          status === "success" ? styles.success : styles.error
+          status === "success"
+            ? styles.success
+            : status === "error"
+            ? styles.error
+            : styles.warning
         }`}
       >
-        <div className={styles.icon}>
-          {status === "success" ? (
-            <IoCheckmarkCircleOutline />
-          ) : (
-            <IoCloseCircleOutline />
-          )}
-        </div>
+        <div className={styles.icon}>{alertIcon()}</div>
         <p>{message}</p>
       </div>
     );

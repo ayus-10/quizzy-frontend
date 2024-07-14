@@ -25,6 +25,10 @@
   background-color: var(--error);
 }
 
+.warning {
+  background-color: var(--warning);
+}
+
 @media screen and (max-width: 480px) {
   .alert_message {
     width: calc(100vw - 10px);
