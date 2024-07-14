@@ -52,7 +52,7 @@ export default function Manage() {
     } else {
       const res = await deleteQuiz(id);
       dispatch(setAlertMessage({ message: res?.data, status: "success" }));
-      navigate("/create");
+      navigate("/admin/create");
     }
   }
 
@@ -69,6 +69,10 @@ export default function Manage() {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return `${hours} hr, ${minutes} min`;
+  }
+
+  function navigateToEdit(id: string, password: string) {
+    navigate(`/admin/edit?id=${id}&pwd=${password}`);
   }
 
   return (
@@ -102,7 +106,10 @@ export default function Manage() {
                 {durationBetween(info.startTime, info.endTime)}
               </div>
               <div className={styles.cell}>
-                <button className={styles.action_button}>
+                <button
+                  className={styles.action_button}
+                  onClick={() => navigateToEdit(info.id, info.password)}
+                >
                   <TbEditCircle />
                   <span>Edit</span>
                 </button>

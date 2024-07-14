@@ -8,6 +8,7 @@ import Create from "./pages/create";
 import Manage from "./pages/manage";
 import Result from "./pages/result";
 import AlertMessage from "./components/alert-message";
+import Edit from "./pages/edit";
 
 export default function App() {
   axios.defaults.withCredentials = true;
@@ -24,6 +25,7 @@ export default function App() {
           <Route Component={Create} path="create" />
           <Route Component={Manage} path="manage" />
           <Route Component={Result} path="result" />
+          <Route Component={Edit} path="edit" />
         </Route>
       </Routes>
     </>

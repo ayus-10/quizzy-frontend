@@ -8,14 +8,31 @@ type QuestionInputProps = {
   questionNumber: number;
   questionId: string;
   removeQuestion: (id: string) => void;
+  previousQuestion?: string;
+  previousAnswerChoices?: string[];
+  previousCorrectChoice?: number;
 };
 
 export default function QuestionInput(props: QuestionInputProps) {
-  const { questionNumber, questionId, removeQuestion } = props;
+  const {
+    questionNumber,
+    questionId,
+    removeQuestion,
+    previousQuestion,
+    previousAnswerChoices,
+    previousCorrectChoice,
+  } = props;
 
   const [choiceIds, setChoiceIds] = useState<string[]>([]);
 
-  useEffect(() => saveNewId(), []);
+  useEffect(() => {
+    let i = 1;
+    const maxChoiceCount = previousAnswerChoices?.length ?? 1;
+    do {
+      saveNewId();
+      i++;
+    } while (i < maxChoiceCount);
+  }, []);
 
   function saveNewId() {
     const newId = uuid();
@@ -41,6 +58,7 @@ export default function QuestionInput(props: QuestionInputProps) {
           id={`questionInput${questionNumber}`}
           className="questionInput"
           placeholder="Question here..."
+          defaultValue={previousQuestion}
         />
         <div className={styles.question_remove_button}>
           <Button title="remove" action={() => removeQuestion(questionId)}>
@@ -59,6 +77,9 @@ export default function QuestionInput(props: QuestionInputProps) {
               id={`answerInput${questionNumber}_${index + 1}`}
               className="answerInputs"
               placeholder="Answer choice here..."
+              defaultValue={
+                previousAnswerChoices && previousAnswerChoices[index]
+              }
             />
             <span className={styles.count}>{index + 1}</span>
             <div className={styles.choice_remove_button}>
@@ -78,6 +99,7 @@ export default function QuestionInput(props: QuestionInputProps) {
             id={`correctChoice${questionNumber}`}
             className="correctChoice"
             placeholder="Correct choice..."
+            defaultValue={previousCorrectChoice}
           />
         </div>
         <Button title="add choice" action={saveNewId} />

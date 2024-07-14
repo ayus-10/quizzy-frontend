@@ -26,6 +26,7 @@ export default function AdminSidebar(props: AdminSidebarProps) {
     { title: "create", path: "/admin/create" },
     { title: "manage", path: "/admin/manage" },
     { title: "result", path: "/admin/result" },
+    { title: "edit", path: "/admin/edit" },
   ];
 
   const location = useLocation();
