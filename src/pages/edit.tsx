@@ -2,18 +2,22 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../styles/edit.module.css";
 import { useEffect, useState } from "react";
 import getQuizQuestions from "../utils/get-quiz-questions";
-import { FetchedQuizQuestion } from "../interfaces/fetched-quiz-question.inferface";
+import { QuizQuestion } from "../interfaces/quiz-question.interface";
 import QuestionInput from "../components/question-input";
 import Button from "../components/button";
 import { BeatLoader } from "react-spinners";
 import { v4 as uuid } from "uuid";
 
+interface QuizQuestionWithId extends QuizQuestion {
+  id: string;
+}
+
 export default function Edit() {
   const [credentials] = useSearchParams();
 
-  const [quizQuestions, setQuizQuestions] = useState<FetchedQuizQuestion[]>([]);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestionWithId[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, _setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,7 +27,11 @@ export default function Edit() {
       const password = String(credentials.get("pwd"));
       try {
         const questions = await getQuizQuestions(id, password);
-        setQuizQuestions(questions);
+        const questionsWithIds: QuizQuestionWithId[] = questions.map((q) => ({
+          ...q,
+          id: uuid(),
+        }));
+        setQuizQuestions(questionsWithIds);
       } catch (err) {
         navigate("/admin");
       }
@@ -34,13 +42,13 @@ export default function Edit() {
 
   function removeQuestion(idToBeRemoved: string) {
     setQuizQuestions((prev) => {
-      return prev.filter((q) => q._id !== idToBeRemoved);
+      return prev.filter((q) => q.id !== idToBeRemoved);
     });
   }
 
   function addQuestion() {
-    const emptyQuestion: FetchedQuizQuestion = {
-      _id: uuid(),
+    const emptyQuestion: QuizQuestionWithId = {
+      id: uuid(),
       question: "",
       answerChoices: [],
       correctChoice: 0,
@@ -54,8 +62,8 @@ export default function Edit() {
       <div className={styles.question_container}>
         {quizQuestions.map((q, index) => (
           <QuestionInput
-            key={q._id}
-            questionId={q._id}
+            key={q.id}
+            questionId={q.id}
             questionNumber={index + 1}
             removeQuestion={removeQuestion}
             previousQuestion={q.question}

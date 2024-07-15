@@ -1,9 +1,9 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
-import { FetchedQuizQuestion } from "../interfaces/fetched-quiz-question.inferface";
+import { QuizQuestion } from "../interfaces/quiz-question.interface";
 
 type FetchedQuizQuestions = {
-  quiz: FetchedQuizQuestion[];
+  quiz: QuizQuestion[];
 };
 
 export default async function getQuizQuestions(id: string, password: string) {
