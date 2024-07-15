@@ -8,6 +8,7 @@ import { useAppDispatch } from "../redux/hooks";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
 import { useNavigate } from "react-router-dom";
 import deleteQuiz from "../utils/delete-quiz";
+import { setQuizCredentials } from "../redux/slices/quiz-credentials.slice";
 
 export default function Manage() {
   const [allQuizInfo, setAllQuizInfo] = useState<FetchedQuizInfo[]>([]);
@@ -72,7 +73,8 @@ export default function Manage() {
   }
 
   function navigateToEdit(id: string, password: string) {
-    navigate(`/admin/edit?id=${id}&pwd=${password}`);
+    dispatch(setQuizCredentials({ id, password }));
+    navigate("/admin/edit");
   }
 
   return (

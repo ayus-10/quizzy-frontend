@@ -11,6 +11,7 @@ import { setAlertMessage } from "../redux/slices/alert-message.slice";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
 import { QuizQuestion } from "../interfaces/quiz-question.interface";
+import { serializeQuizQuestions } from "../utils/serialize-quiz-questions";
 
 export type CreationStage = "initial" | "final";
 
@@ -64,24 +65,8 @@ export default function Create() {
       questionsForm.current?.querySelector("#allQuestions") as Element
     ).children;
 
-    const quizQuestions: QuizQuestion[] = [];
-
-    Array.from(questionInputs).forEach((questionInput) => {
-      const question = (
-        questionInput.querySelector(".questionInput") as HTMLInputElement
-      ).value;
-      const answerChoices: string[] = [];
-      const answerInputs = questionInput.querySelectorAll(".answerInputs");
-      answerInputs.forEach((answerInput) => {
-        answerChoices.push((answerInput as HTMLInputElement).value);
-      });
-      const correctChoice = parseInt(
-        (questionInput.querySelector(".correctChoice") as HTMLInputElement)
-          .value
-      );
-      const quizQuestion = { question, answerChoices, correctChoice };
-      quizQuestions.push(quizQuestion);
-    });
+    const quizQuestions: QuizQuestion[] =
+      serializeQuizQuestions(questionInputs);
 
     try {
       const res = await saveQuizQuestions(quizQuestions);

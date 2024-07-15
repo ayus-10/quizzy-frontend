@@ -31,7 +31,7 @@ export default function QuestionInput(props: QuestionInputProps) {
     do {
       saveNewId();
       i++;
-    } while (i < maxChoiceCount);
+    } while (i <= maxChoiceCount);
   }, []);
 
   function saveNewId() {
