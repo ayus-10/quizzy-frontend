@@ -21,6 +21,8 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
   const endTimeInputElement = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // On initial page load, check if quiz info was previously submitted
+    // and set the creation stage to "final" if so
     const quizToken = localStorage.getItem("QUIZ_TOKEN");
     if (quizToken) {
       setStage("final");
@@ -58,6 +60,8 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
             status: "success",
           })
         );
+        // After saving quiz token to local storage, the creation stage will be advanced
+        // to "final" so that users can create questions for the quiz
         const quizToken = res?.data.quizToken as string;
         localStorage.setItem("QUIZ_TOKEN", quizToken);
         setStage("final");

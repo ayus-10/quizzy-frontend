@@ -17,9 +17,13 @@ export default function Manage() {
     []
   );
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(""); // Used to filter the quizzes by title
 
+  // On clicking "delete" button, the corresponding quiz id will be saved to this state,
+  // and only after clicking the "delete" button again for same quiz it will be deleted
   const [quizIdToBeDeleted, setQuizIdToBeDeleted] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -30,7 +34,10 @@ export default function Manage() {
       const res = await getAllQuizInfo();
       setAllQuizInfo(res?.data.infos);
       setFilteredQuizInfo(res?.data.infos);
+      setLoading(false);
     }
+
+    setLoading(true);
 
     fetchAllQuizInfo();
   }, []);
@@ -73,6 +80,7 @@ export default function Manage() {
   }
 
   function navigateToEdit(id: string, password: string) {
+    // Set the credentials of quiz to be edited and then navigate to edit page
     dispatch(setQuizCredentials({ id, password }));
     navigate("/admin/edit");
   }
@@ -126,7 +134,9 @@ export default function Manage() {
             </Fragment>
           ))}
         </div>
-        {filteredQuizInfo.length == 0 && <p>No data found.</p>}
+        {filteredQuizInfo.length == 0 && (
+          <p> {loading ? "Loading, please wait." : "No data found."}</p>
+        )}
       </div>
     </div>
   );

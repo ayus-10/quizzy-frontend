@@ -5,7 +5,7 @@ import getQuizQuestions from "../utils/get-quiz-questions";
 import { QuizQuestion } from "../interfaces/quiz-question.interface";
 import QuestionInput from "../components/question-input";
 import Button from "../components/button";
-import { BeatLoader } from "react-spinners";
+import { BeatLoader, HashLoader } from "react-spinners";
 import { v4 as uuid } from "uuid";
 import { serializeQuizQuestions } from "../utils/serialize-quiz-questions";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -40,6 +40,8 @@ export default function Edit() {
       const password = credentials.password;
       try {
         const questions = await getQuizQuestions(id, password);
+
+        // Adding the ID property as the fetched quiz questions are not going to have it
         const questionsWithIds: QuizQuestionWithId[] = questions.map((q) => ({
           ...q,
           id: uuid(),
@@ -47,13 +49,20 @@ export default function Edit() {
         setFetchedQuizQuestions(questionsWithIds);
       } catch (err) {
         navigate("/admin");
+      } finally {
+        setLoading(false);
       }
     }
+
+    setLoading(true);
 
     fetchQuestions();
   }, [credentials]);
 
   function removeQuestion(idToBeRemoved: string) {
+    if (fetchedQuizQuestions.length <= 2) {
+      return;
+    }
     setFetchedQuizQuestions((prev) => {
       return prev.filter((q) => q.id !== idToBeRemoved);
     });
@@ -136,8 +145,16 @@ export default function Edit() {
   else {
     return (
       <div className={styles.error}>
-        <CiWarning color="#f43f5e" />
-        <p>Please delete the quiz if it's empty</p>
+        {loading ? (
+          <HashLoader size={60} color="#f43f5e" />
+        ) : (
+          <CiWarning size={100} color="#f43f5e" />
+        )}
+        <p>
+          {loading
+            ? "Loading quiz data, please wait"
+            : "Please delete the quiz if it's empty"}
+        </p>
       </div>
     );
   }

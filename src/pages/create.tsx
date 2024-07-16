@@ -16,8 +16,12 @@ import { serializeQuizQuestions } from "../utils/serialize-quiz-questions";
 export type CreationStage = "initial" | "final";
 
 export default function Create() {
+  // In the "initial" stage, user will fill up title and start/end time for the quiz,
+  // which will be sent to server and this state will be set to "final"
   const [creationStage, setCreationStage] = useState<CreationStage>("initial");
 
+  // This array will be used to map question inputs in the page
+  // Each question will be associated with a unique generated ID
   const [questionIds, setQuestionIds] = useState<string[]>([]);
 
   const [quizTitle, setQuizTitle] = useState("");
@@ -29,6 +33,7 @@ export default function Create() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // On initial page load, generate and save a new ID in order to map one question input on the page
     saveNewId();
 
     async function fetchQuizTitle() {

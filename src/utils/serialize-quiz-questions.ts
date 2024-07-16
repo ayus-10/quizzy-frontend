@@ -1,5 +1,6 @@
 import { QuizQuestion } from "../interfaces/quiz-question.interface";
 
+// This function is used to get quiz data in appropriate format during quiz creation
 export function serializeQuizQuestions(questionInputs: HTMLCollection) {
   const quizQuestions: QuizQuestion[] = [];
   Array.from(questionInputs).forEach((questionInput) => {
