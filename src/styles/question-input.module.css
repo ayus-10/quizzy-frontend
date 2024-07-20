@@ -1,4 +1,4 @@
-.container {
+.question_input {
   display: flex;
   flex-direction: column;
   background-color: var(--gray);
@@ -101,7 +101,7 @@
   place-content: center;
 }
 
-.answer_container {
+.answers {
   display: grid;
   margin: 20px 0;
   grid-template-columns: repeat(2, 1fr);
@@ -124,7 +124,7 @@
 }
 
 @media screen and (max-width: 480px) {
-  .answer_container {
+  .answers {
     display: flex;
     flex-direction: column;
   }

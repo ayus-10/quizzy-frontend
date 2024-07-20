@@ -42,8 +42,8 @@ export default function AdminSidebar(props: AdminSidebarProps) {
 
   return (
     <div
-      className={`${styles.container} ${
-        showMobileSidebar && styles.container_visible
+      className={`${styles.admin_sidebar} ${
+        showMobileSidebar && styles.admin_sidebar_visible
       }`}
     >
       <button
@@ -82,7 +82,7 @@ export default function AdminSidebar(props: AdminSidebarProps) {
       </button>
 
       <div
-        className={styles.popup_container}
+        className={styles.popup_background}
         style={{ display: showLogoutPopup ? "block" : "none" }}
       >
         <div className={styles.popup}>

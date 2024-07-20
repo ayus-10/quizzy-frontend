@@ -1,4 +1,4 @@
-.container {
+.auth_form {
   height: calc(100vh - 70px);
   display: grid;
   justify-content: center;
@@ -54,7 +54,7 @@
 }
 
 @media screen and (max-width: 480px) {
-  .container {
+  .auth_form {
     align-content: center;
   }
 

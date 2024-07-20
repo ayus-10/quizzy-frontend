@@ -34,7 +34,7 @@ export default function AuthForm(props: AuthFormProps) {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.auth_form}>
       <div className={styles.title}>
         <WelcomeText formType={action} />
       </div>

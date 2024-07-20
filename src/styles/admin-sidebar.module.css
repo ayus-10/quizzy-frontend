@@ -1,4 +1,4 @@
-.container {
+.admin_sidebar {
   height: 100vh;
   min-width: 250px;
   max-width: 400px;
@@ -68,7 +68,7 @@
   padding: 10px 0 10px 10px;
 }
 
-.popup_container {
+.popup_background {
   position: fixed;
   z-index: 10;
   height: 100vh;
@@ -132,14 +132,14 @@
 }
 
 @media screen and (max-width: 480px) {
-  .container {
+  .admin_sidebar {
     position: fixed;
     z-index: 5;
     transform: translateX(-100%);
     transition: var(--default-transition);
   }
 
-  .container_visible {
+  .admin_sidebar_visible {
     transform: none;
   }
 

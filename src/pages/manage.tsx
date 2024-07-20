@@ -94,7 +94,7 @@ export default function Manage() {
         placeholder="Search by title..."
         onChange={(e) => setSearch(e.target.value)}
       />
-      <div className={styles.grid_container}>
+      <div className={styles.grid_wrapper}>
         <div className={styles.grid_body}>
           <div className={styles.heading_cell}>S.N.</div>
           <div className={styles.heading_cell}>Title</div>

@@ -118,7 +118,7 @@ export default function Edit() {
         ref={questionsForm}
         onSubmit={handleFormSubmit}
       >
-        <div className={styles.question_container} id="allQuestions">
+        <div className={styles.questions} id="allQuestions">
           {fetchedQuizQuestions.map((q, index) => (
             <QuestionInput
               key={q.id}

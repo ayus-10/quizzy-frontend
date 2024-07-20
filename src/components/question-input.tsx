@@ -60,7 +60,7 @@ export default function QuestionInput(props: QuestionInputProps) {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.question_input}>
       <div className={`${styles.question_input_div} ${styles.input_div}`}>
         <span>Question {questionNumber}</span>
         <input
@@ -76,7 +76,7 @@ export default function QuestionInput(props: QuestionInputProps) {
           </Button>
         </div>
       </div>
-      <div className={styles.answer_container}>
+      <div className={styles.answers}>
         {choiceIds.map((id, index) => (
           <div
             key={id}

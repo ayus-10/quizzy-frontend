@@ -27,7 +27,7 @@
   background-color: white;
 }
 
-.grid_container {
+.grid_wrapper {
   width: 100%;
   max-height: 100%;
   overflow-x: auto;
@@ -74,7 +74,7 @@
   text-decoration: underline;
 }
 
-.grid_container > p {
+.grid_wrapper > p {
   border: 1px solid white;
   padding: 10px;
   font-size: 18px;
@@ -93,7 +93,7 @@
     font-size: 28px;
   }
 
-  .grid_container {
+  .grid_wrapper {
     max-width: calc(100vw - 72px);
   }
 }

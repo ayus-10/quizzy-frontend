@@ -19,14 +19,14 @@ export default function Admin() {
   switch (typeof email) {
     case "string":
       return (
-        <main className={styles.container}>
+        <main className={styles.main_container}>
           <AdminSidebar userEmail={email} />
           <Outlet />
         </main>
       );
     default:
       return (
-        <div className={styles.loading_container}>
+        <div className={styles.loader}>
           <HashLoader color="#f43f5e" size={60} />
           <p>Please wait</p>
         </div>

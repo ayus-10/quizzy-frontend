@@ -77,7 +77,7 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.question_info_form}>
       <form className={styles.info_form} onSubmit={(e) => handleForm(e)}>
         <h1 className={styles.title}>Create a quiz</h1>
         <div className={styles.input_div}>
