@@ -1,0 +1,27 @@
+.input_div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input {
+  border: 0;
+  padding: 10px;
+  outline: none;
+  font-size: 18px;
+  border-radius: 4px;
+  border-bottom: 3px solid var(--gray-dark);
+  transition: var(--default-transition);
+}
+
+.input:focus {
+  border-color: var(--red-2);
+}
+
+.center {
+  text-align: center;
+}
+
+.center > button {
+  width: 100%;
+}

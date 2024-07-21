@@ -1,6 +1,7 @@
 import { Dispatch, FormEvent, SetStateAction, useRef } from "react";
 import Button from "./button";
 import styles from "../styles/auth-form.module.css";
+import commonStyles from "../styles/common-styles.module.css";
 import { Link } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 
@@ -39,27 +40,27 @@ export default function AuthForm(props: AuthFormProps) {
         <WelcomeText formType={action} />
       </div>
       <form onSubmit={(e) => handleSubmit(e)} className={styles.form}>
-        <div className={styles.input_div}>
+        <div className={commonStyles.input_div}>
           <label htmlFor="email">Email</label>
           <input
             ref={emailInput}
             type="email"
             placeholder="Your email"
             id="email"
-            className={styles.input}
+            className={commonStyles.input}
           />
         </div>
-        <div className={styles.input_div}>
+        <div className={commonStyles.input_div}>
           <label htmlFor="password">Password</label>
           <input
             ref={passwordInput}
             type="password"
             placeholder="Password"
             id="password"
-            className={styles.input}
+            className={commonStyles.input}
           />
         </div>
-        <div className={styles.center}>
+        <div className={commonStyles.center}>
           {loading ? (
             <BeatLoader color="#f43f5e" />
           ) : (
@@ -67,7 +68,7 @@ export default function AuthForm(props: AuthFormProps) {
           )}
         </div>
       </form>
-      <div className={styles.center}>
+      <div className={commonStyles.center}>
         <BottomText formType={action} />
       </div>
     </div>

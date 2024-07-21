@@ -9,6 +9,7 @@ import Manage from "./pages/manage";
 import Result from "./pages/result";
 import AlertMessage from "./components/alert-message";
 import Edit from "./pages/edit";
+import Join from "./pages/join";
 
 export default function App() {
   axios.defaults.withCredentials = true;
@@ -20,6 +21,7 @@ export default function App() {
         <Route Component={Home} path="/" />
         <Route Component={Login} path="/login" />
         <Route Component={Register} path="/register" />
+        <Route Component={Join} path="/join" />
         <Route Component={Admin} path="/admin">
           <Route element={<Navigate to="create" />} path="" />
           <Route Component={Create} path="create" />
