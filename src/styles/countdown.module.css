@@ -1,0 +1,12 @@
+.countdown {
+  padding: 10px 0;
+}
+
+.countdown > span {
+  padding: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color: var(--red-2);
+  border-radius: 4px;
+}

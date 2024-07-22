@@ -6,6 +6,7 @@ import styles from "../styles/quiz-info-form.module.css";
 import { CreationStage } from "../pages/create";
 import { useAppDispatch } from "../redux/hooks";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
+import getUTCTimeStamp from "../utils/get-utc-time";
 
 type QuizInfoFormProps = {
   setStage: Dispatch<SetStateAction<CreationStage>>;
@@ -28,12 +29,6 @@ export default function QuizInfoForm(props: QuizInfoFormProps) {
       setStage("final");
     }
   }, []);
-
-  function getUTCTimeStamp(date: string) {
-    const utcDateString = new Date(date).toISOString();
-    const timeStamp = new Date(utcDateString).getTime();
-    return timeStamp;
-  }
 
   async function handleForm(e: FormEvent) {
     e.preventDefault();

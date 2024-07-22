@@ -1,0 +1,16 @@
+.quiz_card {
+  background-color: var(--white);
+  box-shadow: 0 0 1px 1px var(--gray-dark);
+  padding: 20px;
+  display: flex;
+  border-bottom: 4px solid var(--red-2);
+  border-radius: 6px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.quiz_card > p {
+  color: var(--black);
+  font-size: 20px;
+  font-weight: bold;
+}
