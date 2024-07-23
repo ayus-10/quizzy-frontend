@@ -5,11 +5,14 @@ import CountDown from "./countdown";
 import getUTCTimeStamp from "../utils/get-utc-time";
 import Button from "./button";
 
-export default function SavedQuizCard({
-  quizDetails,
-}: {
+type SavedQuizCardProps = {
   quizDetails: JoinedQuiz;
-}) {
+  startQuiz: (q: JoinedQuiz) => void;
+};
+
+export default function SavedQuizCard(props: SavedQuizCardProps) {
+  const { quizDetails, startQuiz } = props;
+
   const [currentTime] = useState(() => getUTCTimeStamp(undefined));
 
   function getLocalTime(timestamp: number) {
@@ -26,7 +29,11 @@ export default function SavedQuizCard({
         <CountDown time={quizDetails.startTime} />
       ) : (
         <div>
-          <Button title="Start" largeFont />
+          <Button
+            title="Start"
+            largeFont
+            action={() => startQuiz(quizDetails)}
+          />
         </div>
       )}
     </div>
