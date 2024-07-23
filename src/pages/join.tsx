@@ -127,11 +127,20 @@ export default function Join() {
           </div>
         </form>
         <div className={styles.divider}></div>
-        <div className={styles.quizzes}>
+        <div className={styles.quizzes_wrapper}>
           <h1 className={styles.title}>Saved Quizzes</h1>
-          {savedQuizzes.map((quiz) => (
-            <SavedQuizCard key={quiz.quizId} quizDetails={quiz} />
-          ))}
+          <div className={styles.quizzes}>
+            {savedQuizzes.length === 0 ? (
+              <p>
+                Quizzes will appear here upon successful join, allowing you to
+                start or view the results.
+              </p>
+            ) : (
+              savedQuizzes.map((quiz) => (
+                <SavedQuizCard key={quiz.quizId} quizDetails={quiz} />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </>

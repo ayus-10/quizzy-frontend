@@ -12,10 +12,16 @@ export default function SavedQuizCard({
 }) {
   const [currentTime] = useState(() => getUTCTimeStamp(undefined));
 
+  function getLocalTime(timestamp: number) {
+    const dateObject = new Date(timestamp);
+    return `${dateObject.toLocaleTimeString()} (${dateObject.toLocaleDateString()})`;
+  }
+
   return (
     <div className={styles.quiz_card}>
       <p>ID: {quizDetails.quizId}</p>
       <p>Title: {quizDetails.quizTitle}</p>
+      <p>Starts: {getLocalTime(quizDetails.startTime)}</p>
       {quizDetails.startTime - currentTime > 0 ? (
         <CountDown time={quizDetails.startTime} />
       ) : (

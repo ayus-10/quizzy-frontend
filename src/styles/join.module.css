@@ -26,11 +26,23 @@
   border: 2px dashed var(--red-2);
 }
 
-.quizzes {
+.quizzes_wrapper {
   width: 100%;
   padding: 20px;
   background-color: var(--gray);
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.quizzes {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.quizzes > div {
+  margin: 16px auto;
+  width: calc(100% - 2px);
 }
 
 @media screen and (max-width: 480px) {
