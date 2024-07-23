@@ -46,7 +46,7 @@
 }
 
 @media screen and (max-width: 480px) {
-  .container {
+  .join_form {
     flex-direction: column;
     height: auto;
   }

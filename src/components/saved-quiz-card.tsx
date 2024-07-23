@@ -2,7 +2,6 @@ import { useState } from "react";
 import { JoinedQuiz } from "../interfaces/joined-quiz.interface";
 import styles from "../styles/saved-quiz-card.module.css";
 import CountDown from "./countdown";
-import getUTCTimeStamp from "../utils/get-utc-time";
 import Button from "./button";
 
 type SavedQuizCardProps = {
@@ -13,7 +12,7 @@ type SavedQuizCardProps = {
 export default function SavedQuizCard(props: SavedQuizCardProps) {
   const { quizDetails, startQuiz } = props;
 
-  const [currentTime] = useState(() => getUTCTimeStamp(undefined));
+  const [countdownEnded, setCountdownEnded] = useState(false);
 
   function getLocalTime(timestamp: number) {
     const dateObject = new Date(timestamp);
@@ -25,8 +24,8 @@ export default function SavedQuizCard(props: SavedQuizCardProps) {
       <p>ID: {quizDetails.quizId}</p>
       <p>Title: {quizDetails.quizTitle}</p>
       <p>Starts: {getLocalTime(quizDetails.startTime)}</p>
-      {quizDetails.startTime - currentTime > 0 ? (
-        <CountDown time={quizDetails.startTime} />
+      {!countdownEnded ? (
+        <CountDown time={quizDetails.startTime} setEnded={setCountdownEnded} />
       ) : (
         <div>
           <Button

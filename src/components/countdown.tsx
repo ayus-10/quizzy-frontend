@@ -1,8 +1,15 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, Dispatch, useEffect, useState } from "react";
 import styles from "../styles/countdown.module.css";
 import getUTCTimeStamp from "../utils/get-utc-time";
 
-export default function CountDown({ time }: { time: number }) {
+type CountDownProps = {
+  time: number;
+  setEnded: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function CountDown(props: CountDownProps) {
+  const { time, setEnded } = props;
+
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
@@ -11,6 +18,10 @@ export default function CountDown({ time }: { time: number }) {
     const currentTime = getUTCTimeStamp(undefined);
 
     const duration = (time - currentTime) / 1000;
+
+    if (duration < 1) {
+      setEnded(true);
+    }
 
     const intervalId = setInterval(() => {
       const h = Math.floor((duration % (60 * 60 * 24)) / (60 * 60));
