@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import JoinForm from "../components/join-form";
 import Nav from "../components/nav";
 import { useAppSelector } from "../redux/hooks";
+import styles from "../styles/join.module.css";
 
 export type JoinStage = "initial" | "final";
 
@@ -12,12 +13,34 @@ export default function Join() {
 
   const quizQuestions = useAppSelector((state) => state.quizQuestions);
 
-  useEffect(() => console.log(quizQuestions), [joinStage]); // TEMP
-
   return (
-    <>
+    <div className={styles.container}>
       <Nav />
-      <JoinForm setStage={setJoinStage} />
-    </>
+      {joinStage === "initial" ? (
+        <JoinForm setStage={setJoinStage} />
+      ) : (
+        <form id="questionInputs" className={styles.question_form}>
+          {quizQuestions.map((q, question_index) => (
+            <div key={question_index} className={styles.question_input}>
+              <p className={styles.question_text}>
+                {question_index + 1}. {q.question}
+              </p>
+              {q.answerChoices.map((a, answer_index) => (
+                <div key={answer_index} className={styles.answer_input}>
+                  <label htmlFor={`answer${question_index}_${answer_index}`}>
+                    <input
+                      type="radio"
+                      name={`answer${question_index}`}
+                      id={`answer${question_index}_${answer_index}`}
+                    />
+                    <span>{a}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          ))}
+        </form>
+      )}
+    </div>
   );
 }
