@@ -4,7 +4,7 @@ import Nav from "../components/nav";
 import { useAppSelector } from "../redux/hooks";
 import styles from "../styles/join.module.css";
 import CountDown from "../components/countdown";
-import { FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft } from "react-icons/fa";
 import Button from "../components/button";
 
 export type JoinStage = "initial" | "final";
@@ -20,7 +20,7 @@ export default function Join() {
 
   const [_timerEnded, setTimerEnded] = useState(false);
 
-  const [showProgress, setShowProgress] = useState(true);
+  const [showProgress, setShowProgress] = useState(window.innerWidth > 768);
 
   const endTime = useAppSelector((state) => state.quizQuestions.endTime);
 
@@ -51,21 +51,27 @@ export default function Join() {
                 <p className={styles.question_text}>
                   {question_index + 1}. {q.question}
                 </p>
-                {q.answerChoices.map((a, answer_index) => (
-                  <div key={answer_index} className={styles.answer_input}>
-                    <label htmlFor={`answer${question_index}_${answer_index}`}>
-                      <input
-                        type="radio"
-                        name={`answer${question_index}`}
-                        id={`answer${question_index}_${answer_index}`}
-                        onClick={() =>
-                          updateAttemptedQuestionNumbers(question_index + 1)
-                        }
-                      />
-                      <span>{a}</span>
-                    </label>
-                  </div>
-                ))}
+                <div className={styles.answer_inputs}>
+                  {q.answerChoices.map((a, answer_index) => (
+                    <div key={answer_index} className={styles.answer_input}>
+                      <label
+                        htmlFor={`answer${question_index}_${answer_index}`}
+                      >
+                        <div className={styles.radio_input}>
+                          <input
+                            type="radio"
+                            name={`answer${question_index}`}
+                            id={`answer${question_index}_${answer_index}`}
+                            onClick={() =>
+                              updateAttemptedQuestionNumbers(question_index + 1)
+                            }
+                          />
+                        </div>
+                        <span className={styles.answer_text}>{a}</span>
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </form>
@@ -80,7 +86,7 @@ export default function Join() {
                 showProgress && styles.toggled
               }`}
             >
-              <FaChevronRight />
+              <FaChevronLeft />
             </button>
             <CountDown time={endTime} setEnded={setTimerEnded} largeFont />
             <div className={styles.progress}>
