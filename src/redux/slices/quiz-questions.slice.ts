@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FetchedQuizQuestion } from "../../interfaces/fetched-quiz-question.interface";
+import { JoinedQuizQuestions } from "../../interfaces/joined-quiz-questions.interface";
 
-const initialState: FetchedQuizQuestion[] = [];
+const initialState: JoinedQuizQuestions = {
+  endTime: 0,
+  questions: [],
+};
 
 const quizQuestionsSlice = createSlice({
   name: "quizQuestions",
   initialState,
   reducers: {
-    setQuizQuestions: (
-      _state,
-      action: PayloadAction<FetchedQuizQuestion[]>
-    ) => {
+    setQuizQuestions: (_state, action: PayloadAction<JoinedQuizQuestions>) => {
       return action.payload;
     },
   },

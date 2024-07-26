@@ -3,4 +3,5 @@ export interface JoinedQuiz {
   quizTitle: string;
   joinToken: string;
   startTime: number;
+  endTime: number;
 }

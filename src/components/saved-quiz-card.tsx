@@ -6,7 +6,7 @@ import Button from "./button";
 
 type SavedQuizCardProps = {
   quizDetails: JoinedQuiz;
-  startQuiz: (token: string) => void;
+  startQuiz: (quiz: JoinedQuiz) => void;
 };
 
 export default function SavedQuizCard(props: SavedQuizCardProps) {
@@ -28,10 +28,7 @@ export default function SavedQuizCard(props: SavedQuizCardProps) {
         <CountDown time={quizDetails.startTime} setEnded={setCountdownEnded} />
       ) : (
         <div>
-          <Button
-            title="Start"
-            action={() => startQuiz(quizDetails.joinToken)}
-          />
+          <Button title="Start" action={() => startQuiz(quizDetails)} />
         </div>
       )}
     </div>

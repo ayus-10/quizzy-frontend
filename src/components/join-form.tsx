@@ -47,14 +47,16 @@ export default function JoinForm(props: JoinFormProps) {
       setSavedQuizzes(JSON.parse(prevJoinedQuizzes));
     }
 
-    // Check for previous quiz token (from unsubmitted quizzes) and auto start the quiz if applicable
-    const prevJoinToken = localStorage.getItem("JOIN_TOKEN");
-    async function autoStartQuiz(token: string | null) {
-      if (token) {
-        await handleQuizStart(token);
-      }
+    // Check for previous unsubmitted quiz and auto start if applicable
+    const autoJoinDataString = localStorage.getItem("AUTO_JOIN_DATA");
+    if (!autoJoinDataString) {
+      return;
     }
-    autoStartQuiz(prevJoinToken);
+    const autoJoinData = JSON.parse(autoJoinDataString) as JoinedQuiz;
+    async function autoStartQuiz(data: JoinedQuiz) {
+      await handleQuizStart(data);
+    }
+    autoStartQuiz(autoJoinData);
   }, []);
 
   async function handleSubmit(e: FormEvent) {
@@ -111,18 +113,20 @@ export default function JoinForm(props: JoinFormProps) {
     }
   }
 
-  async function handleQuizStart(token: string) {
-    const apiUrl = `${BASE_API_URL}/join/quiz/${token}`;
+  async function handleQuizStart(quiz: JoinedQuiz) {
+    const apiUrl = `${BASE_API_URL}/join/quiz/${quiz.joinToken}`;
 
     try {
       // If the request was successful, join stage will be set to "final" which will display the quiz
       // on the page instead of this component
       // We will then use a redux slice to save these questions
-      // The join token will be saved to local storage, in order to auto start quiz if user reloads
+      // The quiz object will be saved to local storage, in order to auto start quiz if user reloads
       const res = await axios.get<FetchedQuizQuestion[]>(apiUrl);
       setStage("final");
-      localStorage.setItem("JOIN_TOKEN", token);
-      dispatch(setQuizQuestions(res.data));
+      localStorage.setItem("AUTO_JOIN_DATA", JSON.stringify(quiz));
+      dispatch(
+        setQuizQuestions({ endTime: quiz.endTime, questions: res.data })
+      );
     } catch (err) {
       if (axios.isAxiosError(err)) {
         dispatch(
@@ -131,7 +135,7 @@ export default function JoinForm(props: JoinFormProps) {
             status: "error",
           })
         );
-        localStorage.removeItem("JOIN_TOKEN");
+        localStorage.removeItem("AUTO_JOIN_DATA");
       }
     }
   }
