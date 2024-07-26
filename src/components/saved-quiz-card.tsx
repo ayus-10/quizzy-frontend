@@ -6,7 +6,7 @@ import Button from "./button";
 
 type SavedQuizCardProps = {
   quizDetails: JoinedQuiz;
-  startQuiz: (q: JoinedQuiz) => void;
+  startQuiz: (token: string) => void;
 };
 
 export default function SavedQuizCard(props: SavedQuizCardProps) {
@@ -30,8 +30,7 @@ export default function SavedQuizCard(props: SavedQuizCardProps) {
         <div>
           <Button
             title="Start"
-            largeFont
-            action={() => startQuiz(quizDetails)}
+            action={() => startQuiz(quizDetails.joinToken)}
           />
         </div>
       )}

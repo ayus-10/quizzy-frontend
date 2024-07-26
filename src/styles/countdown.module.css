@@ -1,12 +1,31 @@
 .countdown {
   padding: 10px 0;
+  display: flex;
 }
 
 .countdown > span {
-  padding: 10px;
-  font-size: 24px;
-  font-weight: bold;
+  padding: 6px 12px;
   color: white;
+  font-size: 20px;
   background-color: var(--red-2);
   border-radius: 4px;
+}
+
+.large_font {
+  text-align: center;
+  flex-grow: 1;
+  padding: 12px !important;
+  font-size: 28px !important;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  .countdown {
+    padding: 0;
+  }
+
+  .large_font {
+    font-size: 22px !important;
+    padding: 6px !important;
+  }
 }

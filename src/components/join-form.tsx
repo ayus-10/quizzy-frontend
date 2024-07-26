@@ -46,6 +46,15 @@ export default function JoinForm(props: JoinFormProps) {
     } else {
       setSavedQuizzes(JSON.parse(prevJoinedQuizzes));
     }
+
+    // Check for previous quiz token (from unsubmitted quizzes) and auto start the quiz if applicable
+    const prevJoinToken = localStorage.getItem("JOIN_TOKEN");
+    async function autoStartQuiz(token: string | null) {
+      if (token) {
+        await handleQuizStart(token);
+      }
+    }
+    autoStartQuiz(prevJoinToken);
   }, []);
 
   async function handleSubmit(e: FormEvent) {
@@ -102,15 +111,17 @@ export default function JoinForm(props: JoinFormProps) {
     }
   }
 
-  async function handleQuizStart(q: JoinedQuiz) {
-    const apiUrl = `${BASE_API_URL}/join/quiz/${q.joinToken}`;
+  async function handleQuizStart(token: string) {
+    const apiUrl = `${BASE_API_URL}/join/quiz/${token}`;
 
     try {
       // If the request was successful, join stage will be set to "final" which will display the quiz
       // on the page instead of this component
-      // As the questions are recieved here, we will use a redux slice to save these questions
+      // We will then use a redux slice to save these questions
+      // The join token will be saved to local storage, in order to auto start quiz if user reloads
       const res = await axios.get<FetchedQuizQuestion[]>(apiUrl);
       setStage("final");
+      localStorage.setItem("JOIN_TOKEN", token);
       dispatch(setQuizQuestions(res.data));
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -120,6 +131,7 @@ export default function JoinForm(props: JoinFormProps) {
             status: "error",
           })
         );
+        localStorage.removeItem("JOIN_TOKEN");
       }
     }
   }
@@ -165,23 +177,23 @@ export default function JoinForm(props: JoinFormProps) {
       </form>
       <div className={styles.divider}></div>
       <div className={styles.quizzes_wrapper}>
-        <h1 className={styles.title}>Saved Quizzes</h1>
-        <div className={styles.quizzes}>
-          {savedQuizzes.length === 0 ? (
-            <p>
-              Quizzes will appear here upon successful join, allowing you to
-              start or view the results.
-            </p>
-          ) : (
-            savedQuizzes.map((quiz) => (
+        <h1 className={`${styles.title} ${styles.padding_x}`}>Saved Quizzes</h1>
+        {savedQuizzes.length === 0 ? (
+          <p>
+            Quizzes will appear here upon successful join, allowing you to start
+            or view the results.
+          </p>
+        ) : (
+          <div className={styles.quizzes}>
+            {savedQuizzes.map((quiz) => (
               <SavedQuizCard
                 key={quiz.quizId}
                 quizDetails={quiz}
                 startQuiz={handleQuizStart}
               />
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,10 +5,11 @@ import getUTCTimeStamp from "../utils/get-utc-time";
 type CountDownProps = {
   time: number;
   setEnded: Dispatch<SetStateAction<boolean>>;
+  largeFont?: boolean;
 };
 
 export default function CountDown(props: CountDownProps) {
-  const { time, setEnded } = props;
+  const { time, setEnded, largeFont } = props;
 
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -41,7 +42,7 @@ export default function CountDown(props: CountDownProps) {
 
   return (
     <div className={styles.countdown}>
-      <span>
+      <span className={largeFont ? styles.large_font : undefined}>
         {zeroPrefix(hours)}:{zeroPrefix(minutes)}:{zeroPrefix(seconds)}
       </span>
     </div>
