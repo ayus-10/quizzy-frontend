@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import JoinForm from "../components/join-form";
 import Nav from "../components/nav";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import styles from "../styles/join.module.css";
 import CountDown from "../components/countdown";
 import { FaChevronLeft } from "react-icons/fa";
 import Button from "../components/button";
+import { useNavigate } from "react-router-dom";
+import serializeQuizSubmission from "../utils/serialize-quiz-submission";
+import { setAlertMessage } from "../redux/slices/alert-message.slice";
 
 export type JoinStage = "initial" | "final";
 
@@ -18,7 +21,7 @@ export default function Join() {
     (state) => state.quizQuestions.questions
   );
 
-  const [_timerEnded, setTimerEnded] = useState(false);
+  const [timerEnded, setTimerEnded] = useState(false);
 
   const [showProgress, setShowProgress] = useState(window.innerWidth > 768);
 
@@ -27,6 +30,23 @@ export default function Join() {
   const [attemptedQuestionNumbers, setAttemptedQuestionNumbers] = useState<
     number[]
   >([]);
+
+  const navigate = useNavigate();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (timerEnded) {
+      dispatch(
+        setAlertMessage({
+          message: "Time's up, submit the quiz now",
+          status: "warning",
+        })
+      );
+    }
+  }, [timerEnded]);
 
   function updateAttemptedQuestionNumbers(index: number) {
     if (!attemptedQuestionNumbers.includes(index)) {
@@ -38,43 +58,58 @@ export default function Join() {
     return attemptedQuestionNumbers.includes(index);
   }
 
+  function cancelQuiz() {
+    localStorage.removeItem("AUTO_JOIN_DATA");
+    navigate("/");
+  }
+
+  function submitQuiz(e: FormEvent) {
+    e.preventDefault();
+    if (!formRef.current) {
+      return;
+    }
+    const serializedData = serializeQuizSubmission(formRef.current);
+    console.log(serializedData);
+    localStorage.removeItem("AUTO_JOIN_DATA");
+  }
+
   return (
     <div className={styles.container}>
       <Nav />
       {joinStage === "initial" ? (
         <JoinForm setStage={setJoinStage} />
       ) : (
-        <>
-          <form id="questionInputs" className={styles.question_form}>
-            {quizQuestions.map((q, question_index) => (
-              <div key={question_index} className={styles.question_input}>
-                <p className={styles.question_text}>
-                  {question_index + 1}. {q.question}
-                </p>
-                <div className={styles.answer_inputs}>
-                  {q.answerChoices.map((a, answer_index) => (
-                    <div key={answer_index} className={styles.answer_input}>
-                      <label
-                        htmlFor={`answer${question_index}_${answer_index}`}
-                      >
-                        <div className={styles.radio_input}>
-                          <input
-                            type="radio"
-                            name={`answer${question_index}`}
-                            id={`answer${question_index}_${answer_index}`}
-                            onClick={() =>
-                              updateAttemptedQuestionNumbers(question_index + 1)
-                            }
-                          />
-                        </div>
-                        <span className={styles.answer_text}>{a}</span>
-                      </label>
-                    </div>
-                  ))}
-                </div>
+        <form
+          ref={formRef}
+          className={styles.question_form}
+          onSubmit={(e) => submitQuiz(e)}
+        >
+          {quizQuestions.map((q, question_index) => (
+            <div key={question_index} className={styles.question_input}>
+              <p className={styles.question_text}>
+                {question_index + 1}. {q.question}
+              </p>
+              <div className={styles.answer_inputs}>
+                {q.answerChoices.map((a, answer_index) => (
+                  <div key={answer_index} className={styles.answer_input}>
+                    <label htmlFor={`answer${question_index}_${answer_index}`}>
+                      <div className={styles.radio_input}>
+                        <input
+                          type="radio"
+                          name={q.questionId}
+                          id={`answer${question_index}_${answer_index}`}
+                          onClick={() =>
+                            updateAttemptedQuestionNumbers(question_index + 1)
+                          }
+                        />
+                      </div>
+                      <span className={styles.answer_text}>{a}</span>
+                    </label>
+                  </div>
+                ))}
               </div>
-            ))}
-          </form>
+            </div>
+          ))}
           <div
             className={`${styles.quiz_progress} ${
               showProgress && styles.quiz_progress_visible
@@ -107,11 +142,11 @@ export default function Join() {
               })}
             </div>
             <div className={styles.options}>
-              <Button title="Cancel" secondaryColor />
-              <Button title="Submit" />
+              <Button title="Cancel" secondaryColor action={cancelQuiz} />
+              <Button title="Submit" submitForm />
             </div>
           </div>
-        </>
+        </form>
       )}
     </div>
   );
