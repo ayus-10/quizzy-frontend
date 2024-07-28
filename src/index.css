@@ -5,7 +5,7 @@
   --red-3: #e11d48;
   --error: #dc2626;
   --success: #16a34a;
-  --warning: #f2d016;
+  --warning: #eab308;
   --white: #f0f0f0;
   --gray: #e5e5e5;
   --gray-light: #d9d9d9;
@@ -26,7 +26,7 @@ input[type="radio"] {
   -webkit-appearance: none;
   appearance: none;
   background-color: var(--white);
-  border: 2px solid var(--red-1);
+  border: 1px solid var(--gray-dark);
   height: 25px;
   width: 25px;
   outline: none;
@@ -40,8 +40,8 @@ input[type="radio"] {
 
 input[type="radio"]::after {
   content: "";
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
   border-radius: 50%;
   transform: scale(0);
   transition: 100ms all ease-in-out;

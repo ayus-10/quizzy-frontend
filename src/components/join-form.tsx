@@ -92,13 +92,14 @@ export default function JoinForm(props: JoinFormProps) {
             status: "success",
           })
         );
+      } else {
+        dispatch(
+          setAlertMessage({
+            message: "You have already joined this quiz",
+            status: "warning",
+          })
+        );
       }
-      dispatch(
-        setAlertMessage({
-          message: "You have already joined this quiz",
-          status: "warning",
-        })
-      );
     } catch (err) {
       if (axios.isAxiosError(err)) {
         dispatch(

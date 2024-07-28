@@ -88,7 +88,9 @@ export default function Join() {
             >
               <FaChevronLeft />
             </button>
+            <h2>Time remaining:</h2>
             <CountDown time={endTime} setEnded={setTimerEnded} largeFont />
+            <h2>Questions:</h2>
             <div className={styles.progress}>
               {quizQuestions.map((_, i) => {
                 const isAttempted = checkAttemptedQuestionNumbers(i + 1);
