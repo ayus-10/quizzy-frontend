@@ -9,6 +9,9 @@ import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
 import serializeQuizSubmission from "../utils/serialize-quiz-submission";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
+import axios from "axios";
+import { BASE_API_URL } from "../config";
+import { BeatLoader } from "react-spinners";
 
 export type JoinStage = "initial" | "final";
 
@@ -20,6 +23,8 @@ export default function Join() {
   const quizQuestions = useAppSelector(
     (state) => state.quizQuestions.questions
   );
+
+  const [loading, setLoading] = useState(false);
 
   const [timerEnded, setTimerEnded] = useState(false);
 
@@ -41,10 +46,11 @@ export default function Join() {
     if (timerEnded) {
       dispatch(
         setAlertMessage({
-          message: "Time's up, submit the quiz now",
+          message: "Time's up, submitting the quiz now",
           status: "warning",
         })
       );
+      submitQuiz(null);
     }
   }, [timerEnded]);
 
@@ -63,14 +69,44 @@ export default function Join() {
     navigate("/");
   }
 
-  function submitQuiz(e: FormEvent) {
-    e.preventDefault();
+  async function submitQuiz(e: FormEvent | null) {
+    if (e) {
+      e.preventDefault();
+    }
+
+    setLoading(true);
+
     if (!formRef.current) {
       return;
     }
-    const serializedData = serializeQuizSubmission(formRef.current);
-    console.log(serializedData);
-    localStorage.removeItem("AUTO_JOIN_DATA");
+
+    const autoJoinData = JSON.parse(
+      localStorage.getItem("AUTO_JOIN_DATA") as string
+    );
+
+    const joinToken = autoJoinData.joinToken as string;
+    const fullname = autoJoinData.fullname as string;
+    const quizSubmission = serializeQuizSubmission(formRef.current);
+
+    const apiUrl = `${BASE_API_URL}/join/submit/${joinToken}`;
+
+    try {
+      await axios.post(apiUrl, { fullname, quizSubmission }); // TODO: extract result from response
+      dispatch(
+        setAlertMessage({
+          message: "Quiz submitted successfully",
+          status: "success",
+        })
+      );
+      localStorage.removeItem("AUTO_JOIN_DATA");
+      setJoinStage("initial");
+    } catch (err) {
+      dispatch(
+        setAlertMessage({ message: "Unable to submit quiz", status: "error" })
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -127,11 +163,11 @@ export default function Join() {
             <CountDown time={endTime} setEnded={setTimerEnded} largeFont />
             <h2>Questions:</h2>
             <div className={styles.progress}>
-              {quizQuestions.map((_, i) => {
+              {quizQuestions.map((q, i) => {
                 const isAttempted = checkAttemptedQuestionNumbers(i + 1);
                 return (
                   <div
-                    key={i}
+                    key={`progress_icon_${q.questionId}`}
                     className={`${styles.question_progress} ${
                       isAttempted && styles.question_progress_attempted
                     }`}
@@ -143,7 +179,9 @@ export default function Join() {
             </div>
             <div className={styles.options}>
               <Button title="Cancel" secondaryColor action={cancelQuiz} />
-              <Button title="Submit" submitForm />
+              <Button title="Submit" submitForm>
+                {loading ? <BeatLoader color="#fff" /> : undefined}
+              </Button>
             </div>
           </div>
         </form>
