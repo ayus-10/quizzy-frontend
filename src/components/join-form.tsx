@@ -115,14 +115,16 @@ export default function JoinForm(props: JoinFormProps) {
   }
 
   async function handleQuizStart(quiz: JoinedQuiz) {
-    const apiUrl = `${BASE_API_URL}/join/quiz/${quiz.joinToken}`;
+    const apiUrl = `${BASE_API_URL}/join/quiz`;
 
     try {
       // If the request was successful, join stage will be set to "final" which will display the quiz
       // on the page instead of this component
       // We will then use a redux slice to save these questions
       // The quiz object will be saved to local storage, in order to auto start quiz if user reloads
-      const res = await axios.get<FetchedQuizQuestion[]>(apiUrl);
+      const res = await axios.post<FetchedQuizQuestion[]>(apiUrl, {
+        joinToken: quiz.joinToken,
+      });
       setStage("final");
       localStorage.setItem("AUTO_JOIN_DATA", JSON.stringify(quiz));
       dispatch(

@@ -88,10 +88,10 @@ export default function Join() {
     const fullname = autoJoinData.fullname as string;
     const quizSubmission = serializeQuizSubmission(formRef.current);
 
-    const apiUrl = `${BASE_API_URL}/join/submit/${joinToken}`;
+    const apiUrl = `${BASE_API_URL}/join/submit`;
 
     try {
-      await axios.post(apiUrl, { fullname, quizSubmission }); // TODO: extract result from response
+      await axios.post(apiUrl, { fullname, joinToken, quizSubmission }); // TODO: extract result from response
       dispatch(
         setAlertMessage({
           message: "Quiz submitted successfully",
@@ -152,6 +152,7 @@ export default function Join() {
             }`}
           >
             <button
+              type="button"
               onClick={() => setShowProgress((prev) => !prev)}
               className={`${styles.toggle_quiz_progress} ${
                 showProgress && styles.toggled

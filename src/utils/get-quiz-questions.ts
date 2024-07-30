@@ -7,13 +7,10 @@ type FetchedQuizQuestions = {
 };
 
 export default async function getQuizQuestions(id: string, password: string) {
-  const apiUrl = `${BASE_API_URL}/quiz/questions`;
+  const apiUrl = `${BASE_API_URL}/quiz/questions?id=${id}&password=${password}`;
 
   try {
-    const res = await axios.post<FetchedQuizQuestions>(apiUrl, {
-      id,
-      password,
-    });
+    const res = await axios.get<FetchedQuizQuestions>(apiUrl);
     return res.data.quiz;
   } catch (err) {
     throw err;

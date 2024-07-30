@@ -4,7 +4,6 @@ import QuizInfoForm from "../components/quiz-info-form";
 import QuestionInput from "../components/question-input";
 import styles from "../styles/create.module.css";
 import Button from "../components/button";
-import getQuizInfo from "../utils/get-quiz-info";
 import saveQuizQuestions from "../utils/save-quiz-questions";
 import { useAppDispatch } from "../redux/hooks";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
@@ -24,7 +23,7 @@ export default function Create() {
   // Each question will be associated with a unique generated ID
   const [questionIds, setQuestionIds] = useState<string[]>([]);
 
-  const [quizTitle, setQuizTitle] = useState("");
+  const [quizTitle, setQuizTitle] = useState("Title");
 
   const [loading, setLoading] = useState(false);
 
@@ -35,14 +34,13 @@ export default function Create() {
   useEffect(() => {
     // On initial page load, generate and save a new ID in order to map one question input on the page
     saveNewId();
-
-    async function fetchQuizTitle() {
-      const res = await getQuizInfo();
-      setQuizTitle(res?.data.title);
-    }
-
-    fetchQuizTitle();
   }, []);
+
+  const quizInfo = JSON.parse(String(localStorage.getItem("QUIZ_INFO")));
+
+  useEffect(() => {
+    if (quizInfo) setQuizTitle(quizInfo.title);
+  }, [quizInfo]);
 
   function saveNewId() {
     const newId = uuid();
@@ -57,7 +55,7 @@ export default function Create() {
   }
 
   function cancelQuizCreation() {
-    localStorage.removeItem("QUIZ_TOKEN");
+    localStorage.removeItem("QUIZ_INFO");
     setCreationStage("initial");
   }
 
@@ -76,7 +74,7 @@ export default function Create() {
     try {
       const res = await saveQuizQuestions(quizQuestions);
       dispatch(setAlertMessage({ message: res?.data, status: "success" }));
-      localStorage.removeItem("QUIZ_TOKEN");
+      localStorage.removeItem("QUIZ_INFO");
       setCreationStage("initial");
     } catch (err) {
       if (axios.isAxiosError(err))
@@ -101,7 +99,7 @@ export default function Create() {
           onSubmit={handleFormSubmit}
           ref={questionsForm}
         >
-          <h1 className={styles.title}>{quizTitle || "loading..."}</h1>
+          <h1 className={styles.title}>{quizTitle}</h1>
           <div className={styles.questions} id="allQuestions">
             {questionIds.map((id, index) => (
               <QuestionInput
