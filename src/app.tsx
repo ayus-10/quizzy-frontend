@@ -25,7 +25,7 @@ export default function App() {
         <Route Component={Result} path="/result/:id" />
         <Route Component={Admin} path="/admin">
           <Route element={<Navigate to="create" />} path="" />
-          <Route element={<Navigate to="create" />} path="result" />
+          <Route element={<Navigate to="" />} path="result" />
           <Route Component={Create} path="create" />
           <Route Component={Manage} path="manage" />
           <Route Component={Edit} path="edit" />

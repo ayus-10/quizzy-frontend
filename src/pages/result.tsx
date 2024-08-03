@@ -1,20 +1,167 @@
 import { useEffect, useState } from "react";
-import { QuizSubmission } from "../interfaces/quiz-submission.interface";
+import {
+  QuizSubmission,
+  SubmittedQuestion,
+} from "../interfaces/quiz-submission.interface";
 import { useParams } from "react-router-dom";
+import Nav from "../components/nav";
+import styles from "../styles/result.module.css";
+import { MdCheck, MdClose } from "react-icons/md";
+import { BASE_API_URL } from "../config";
+import axios from "axios";
+import { FaChevronDown } from "react-icons/fa";
+
+interface QuizSubmissionWithText extends SubmittedQuestion {
+  questionText: string;
+  selectedAnswerText: string;
+  correctAnswerText: string;
+}
+
+interface QuizQuestion {
+  _id: string;
+  quizId: string;
+  question: string;
+  answerChoices: string[];
+  correctChoice: number;
+}
 
 export default function Result() {
   const { id } = useParams();
 
-  const [currentResult, setCurrentResult] = useState<QuizSubmission>();
+  const [results, setResults] = useState<QuizSubmissionWithText[]>([]);
+
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
-    const resultsString = localStorage.getItem("RESULTS");
-    if (!resultsString) {
+    const submittedQuestionsString = localStorage.getItem("RESULTS");
+    if (!submittedQuestionsString) {
       return;
     }
-    const results = JSON.parse(resultsString) as QuizSubmission[];
-    setCurrentResult(results.find((r) => r.quizId === id));
+
+    const submittedQuestions = JSON.parse(
+      submittedQuestionsString
+    ) as QuizSubmission[];
+
+    const currentResult = submittedQuestions.find((r) => r.quizId === id);
+    if (!currentResult) {
+      return;
+    }
+
+    const questionIds: string[] = [];
+    currentResult.submittedQuestions.forEach((q) =>
+      questionIds.push(q.questionId)
+    );
+
+    // Here in local storage we do have the result data, but we only have questionId,
+    // correctAnswerNumber and selectedAnswerNumber
+    // So, first we gather all the questionIds, get associated QuizQuestion objects from server
+    // to extract the question, selectedAnswer and correctAnswer text
+    async function getQuizQuestions() {
+      const results: QuizSubmissionWithText[] = [];
+
+      const apiUrl = `${BASE_API_URL}/quiz/questions/${currentResult?.quizId}`;
+
+      const quizQuestions = (await axios.post(apiUrl, { questionIds }))
+        .data as QuizQuestion[];
+
+      currentResult?.submittedQuestions.forEach((sq) => {
+        const currentQuizQuestion = quizQuestions.find(
+          (qq) => qq._id === sq.questionId
+        );
+
+        results.push({
+          correctAnswerNumber: sq.correctAnswerNumber,
+          selectedAnswerNumber: sq.selectedAnswerNumber,
+          questionId: sq.questionId,
+          questionText: String(currentQuizQuestion?.question),
+          correctAnswerText: String(
+            currentQuizQuestion?.answerChoices[sq.correctAnswerNumber - 1]
+          ),
+          selectedAnswerText: String(
+            currentQuizQuestion?.answerChoices[sq.selectedAnswerNumber - 1]
+          ),
+        });
+      });
+
+      setResults(results);
+    }
+    getQuizQuestions();
   }, [id]);
 
-  return <div>{currentResult && JSON.stringify(currentResult)}</div>;
+  if (results)
+    return (
+      <>
+        <div className={styles.nav_div}>
+          <Nav />
+        </div>
+        <div className={styles.container}>
+          <div className={styles.questions}>
+            {results.map((r, index) => (
+              <div className={styles.question} key={r.questionId}>
+                <div className={styles.question_div}>
+                  <div className={styles.question_title}>
+                    <div
+                      className={`${styles.icon} ${
+                        r.selectedAnswerNumber === r.correctAnswerNumber
+                          ? styles.icon_correct
+                          : styles.icon_incorrect
+                      }`}
+                    >
+                      {r.correctAnswerNumber === r.selectedAnswerNumber ? (
+                        <MdCheck />
+                      ) : (
+                        <MdClose />
+                      )}
+                    </div>
+                    <p className={styles.bold}>Q.No.: {index + 1}</p>
+                  </div>
+                  <div className={styles.question_text}>
+                    <span className={styles.bold}>Question: </span>
+                    <p>{r.questionText}</p>
+                  </div>
+                </div>
+                <div className={styles.answer_div}>
+                  <span className={styles.bold}>Chosen: </span>
+                  <p>{r.selectedAnswerText}</p>
+                </div>
+                <div className={styles.answer_div}>
+                  <span className={styles.bold}>Correct: </span>
+                  <p>{r.correctAnswerText}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div
+            className={`${styles.summary} ${
+              showSummary && styles.summary_visible
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => setShowSummary((prev) => !prev)}
+              className={`${styles.toggle_summary} ${
+                showSummary && styles.toggled
+              }`}
+            >
+              <FaChevronDown />
+            </button>
+            <h2>Questions:</h2>
+            <div className={styles.results}>
+              {results.map((r, index) => (
+                <div
+                  key={`result_icon_${index}`}
+                  className={`${styles.question_result} ${
+                    r.correctAnswerNumber === r.selectedAnswerNumber
+                      ? styles.question_result_correct
+                      : styles.question_result_incorrect
+                  }`}
+                >
+                  {index + 1}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </>
+    );
 }

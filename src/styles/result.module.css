@@ -1,0 +1,159 @@
+.nav_div {
+  position: sticky;
+  inset: 0;
+  z-index: 100;
+}
+
+.container {
+  min-height: calc(100vh - 70px);
+  padding: 36px;
+  display: flex;
+  gap: 50px;
+}
+
+.questions {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.question {
+  background-color: var(--gray);
+  padding: 16px;
+  color: var(--black);
+  border-radius: 6px;
+  border-bottom: 4px solid var(--red-2);
+}
+
+.question_div {
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.question_title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.icon {
+  color: white;
+  font-size: 26px;
+  padding: 2px;
+  display: grid;
+  place-content: center;
+  border-radius: 6px;
+}
+
+.icon_correct {
+  background-color: var(--success);
+}
+
+.icon_incorrect {
+  background-color: var(--error);
+}
+
+.question_text {
+  display: flex;
+  gap: 4px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.answer_div {
+  display: flex;
+  gap: 4px;
+  font-size: 22px;
+}
+
+.summary {
+  background-color: var(--gray);
+  padding: 20px;
+  border-radius: 6px;
+  width: 300px;
+  height: calc(100vh - 70px);
+}
+
+.results {
+  margin-top: 20px;
+  background-color: var(--white);
+  border-radius: inherit;
+  height: calc(100% - 40px);
+  width: 100%;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  color: white;
+}
+
+.question_result {
+  font-size: 20px;
+  display: grid;
+  place-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 9999px;
+}
+
+.question_result_correct {
+  background-color: var(--success);
+}
+
+.question_result_incorrect {
+  background-color: var(--error);
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    flex-direction: column-reverse;
+  }
+
+  .summary {
+    position: fixed;
+    inset: 0;
+    transform: translateY(calc(70px - 100%));
+    height: 280px;
+    width: 100%;
+    transition: var(--default-transition);
+  }
+
+  .summary_visible {
+    transform: translateY(70px);
+  }
+
+  .toggle_summary {
+    position: absolute;
+    z-index: 100;
+    bottom: -33px;
+    left: 24px;
+    background-color: var(--red-2);
+    border: 0;
+    color: white;
+    font-size: 20px;
+    padding: 6px;
+    height: 33px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    transition: var(--default-transition);
+  }
+
+  .toggle_summary:hover {
+    background-color: var(--red-3);
+  }
+
+  .toggled svg {
+    transform: rotate(180deg);
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .toggle_summary {
+    display: none;
+  }
+}

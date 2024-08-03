@@ -1,9 +1,11 @@
 export interface QuizSubmission {
   quizId: string;
   submittedBy: string;
-  submittedQuestions: {
-    questionId: string;
-    selectedAnswerNumber: number;
-    correctAnswerNumber: number;
-  }[];
+  submittedQuestions: SubmittedQuestion[];
+}
+
+export interface SubmittedQuestion {
+  questionId: string;
+  selectedAnswerNumber: number;
+  correctAnswerNumber: number;
 }
