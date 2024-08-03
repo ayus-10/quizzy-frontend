@@ -12,9 +12,5 @@ export default async function getAllQuizInfo() {
 
   const getAllQuizInfoRequest = () => axios.get<AllQuizInfo>(apiUrl);
 
-  try {
-    return await handleQuizRequests(getAllQuizInfoRequest);
-  } catch (err) {
-    throw err;
-  }
+  return await handleQuizRequests(getAllQuizInfoRequest);
 }

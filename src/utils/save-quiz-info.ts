@@ -13,9 +13,5 @@ export default async function saveQuizInfo(info: QuizInfo) {
 
   const saveQuizInfoRequest = async () => axios.post(apiUrl, info);
 
-  try {
-    return await handleQuizRequests(saveQuizInfoRequest);
-  } catch (err) {
-    throw err;
-  }
+  return await handleQuizRequests(saveQuizInfoRequest);
 }

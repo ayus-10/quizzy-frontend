@@ -13,9 +13,5 @@ export default async function saveQuizQuestions(quizQuestions: QuizQuestion[]) {
   const saveQuizQuestionsRequest = () =>
     axios.post(apiUrl, { quizToken, quizQuestions });
 
-  try {
-    return await handleQuizRequests(saveQuizQuestionsRequest);
-  } catch (err) {
-    throw err;
-  }
+  return await handleQuizRequests(saveQuizQuestionsRequest);
 }

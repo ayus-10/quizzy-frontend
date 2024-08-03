@@ -7,9 +7,5 @@ export default async function deleteQuiz(id: string) {
 
   const deleteQuizRequest = () => axios.delete(apiUrl);
 
-  try {
-    return await handleQuizRequests(deleteQuizRequest);
-  } catch (err) {
-    throw err;
-  }
+  return await handleQuizRequests(deleteQuizRequest);
 }

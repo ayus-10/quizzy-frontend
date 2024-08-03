@@ -12,9 +12,5 @@ export default async function updateQuizQuestions(
   const updateQuizQuestionsRequest = () =>
     axios.patch(apiUrl, { quizQuestions });
 
-  try {
-    return await handleQuizRequests(updateQuizQuestionsRequest);
-  } catch (err) {
-    throw err;
-  }
+  return await handleQuizRequests(updateQuizQuestionsRequest);
 }
