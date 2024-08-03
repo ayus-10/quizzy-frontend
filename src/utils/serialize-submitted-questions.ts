@@ -3,7 +3,7 @@ interface AnswerSubmission {
   selectedAnswerNumber: number;
 }
 
-export default function serializeQuizSubmission(form: HTMLFormElement) {
+export default function serializeSubmittedQuestions(form: HTMLFormElement) {
   const answerInputs = Array.from(form.childNodes);
   const serializedData: AnswerSubmission[] = [];
   answerInputs.forEach((child) => {

@@ -7,11 +7,13 @@ import CountDown from "../components/countdown";
 import { FaChevronLeft } from "react-icons/fa";
 import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
-import serializeQuizSubmission from "../utils/serialize-quiz-submission";
+import serializeSubmittedQuestions from "../utils/serialize-submitted-questions";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
 import axios from "axios";
 import { BASE_API_URL } from "../config";
 import { BeatLoader } from "react-spinners";
+import { QuizSubmission } from "../interfaces/quiz-submission.interface";
+import { setSubmittedQuizIds } from "../redux/slices/submitted-quiz-ids.slice";
 
 export type JoinStage = "initial" | "final";
 
@@ -41,6 +43,28 @@ export default function Join() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // IDs of submitted quiz will be stored in a redux slice so that instead of "Start"
+    // "Result" button can be displayed by "saved-quiz-card.tsx" component
+    const submittedQuizzesString = localStorage.getItem("RESULTS");
+
+    const submittedQuizzes = JSON.parse(
+      submittedQuizzesString as string
+    ) as QuizSubmission[];
+
+    if (!Array.isArray(submittedQuizzes)) {
+      return;
+    }
+
+    const submittedQuizIds: string[] = [];
+
+    submittedQuizzes.forEach((sq) => {
+      submittedQuizIds.push(sq.quizId);
+    });
+
+    dispatch(setSubmittedQuizIds(submittedQuizIds));
+  }, []);
 
   useEffect(() => {
     if (timerEnded) {
@@ -86,24 +110,53 @@ export default function Join() {
 
     const joinToken = autoJoinData.joinToken as string;
     const fullname = autoJoinData.fullname as string;
-    const quizSubmission = serializeQuizSubmission(formRef.current);
+    const submittedQuestions = serializeSubmittedQuestions(formRef.current);
 
     const apiUrl = `${BASE_API_URL}/join/submit`;
 
     try {
-      await axios.post(apiUrl, { fullname, joinToken, quizSubmission }); // TODO: extract result from response
+      const res = await axios.post(apiUrl, {
+        fullname,
+        joinToken,
+        submittedQuestions,
+      });
+
+      const result = res.data.result as QuizSubmission;
+
+      const prevResultString = localStorage.getItem("RESULTS");
+      if (!prevResultString) {
+        localStorage.setItem("RESULTS", JSON.stringify([result]));
+      } else {
+        const prevResult = JSON.parse(
+          prevResultString as string
+        ) as QuizSubmission[];
+
+        localStorage.setItem(
+          "RESULTS",
+          JSON.stringify([...prevResult, result])
+        );
+      }
+
       dispatch(
         setAlertMessage({
           message: "Quiz submitted successfully",
           status: "success",
         })
       );
+
       localStorage.removeItem("AUTO_JOIN_DATA");
       setJoinStage("initial");
+
+      navigate(`/result/${result.quizId}`);
     } catch (err) {
-      dispatch(
-        setAlertMessage({ message: "Unable to submit quiz", status: "error" })
-      );
+      if (axios.isAxiosError(err)) {
+        dispatch(
+          setAlertMessage({
+            message: err.response?.data ?? err.message,
+            status: "error",
+          })
+        );
+      }
     } finally {
       setLoading(false);
     }

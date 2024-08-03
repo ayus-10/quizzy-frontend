@@ -22,11 +22,12 @@ export default function App() {
         <Route Component={Login} path="/login" />
         <Route Component={Register} path="/register" />
         <Route Component={Join} path="/join" />
+        <Route Component={Result} path="/result/:id" />
         <Route Component={Admin} path="/admin">
           <Route element={<Navigate to="create" />} path="" />
+          <Route element={<Navigate to="create" />} path="result" />
           <Route Component={Create} path="create" />
           <Route Component={Manage} path="manage" />
-          <Route Component={Result} path="result" />
           <Route Component={Edit} path="edit" />
         </Route>
       </Routes>
