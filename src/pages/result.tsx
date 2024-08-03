@@ -10,6 +10,7 @@ import { MdCheck, MdClose } from "react-icons/md";
 import { BASE_API_URL } from "../config";
 import axios from "axios";
 import { FaChevronDown } from "react-icons/fa";
+import { HashLoader } from "react-spinners";
 
 interface QuizSubmissionWithText extends SubmittedQuestion {
   questionText: string;
@@ -31,6 +32,8 @@ export default function Result() {
   const [results, setResults] = useState<QuizSubmissionWithText[]>([]);
 
   const [showSummary, setShowSummary] = useState(false);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const submittedQuestionsString = localStorage.getItem("RESULTS");
@@ -84,6 +87,7 @@ export default function Result() {
       });
 
       setResults(results);
+      setLoading(false);
     }
     getQuizQuestions();
   }, [id]);
@@ -94,74 +98,90 @@ export default function Result() {
         <div className={styles.nav_div}>
           <Nav />
         </div>
-        <div className={styles.container}>
-          <div className={styles.questions}>
-            {results.map((r, index) => (
-              <div className={styles.question} key={r.questionId}>
-                <div className={styles.question_div}>
-                  <div className={styles.question_title}>
-                    <div
-                      className={`${styles.icon} ${
-                        r.selectedAnswerNumber === r.correctAnswerNumber
-                          ? styles.icon_correct
-                          : styles.icon_incorrect
-                      }`}
-                    >
-                      {r.correctAnswerNumber === r.selectedAnswerNumber ? (
-                        <MdCheck />
-                      ) : (
-                        <MdClose />
-                      )}
-                    </div>
-                    <p className={styles.bold}>Q.No.: {index + 1}</p>
-                  </div>
-                  <div className={styles.question_text}>
-                    <span className={styles.bold}>Question: </span>
-                    <p>{r.questionText}</p>
-                  </div>
-                </div>
-                <div className={styles.answer_div}>
-                  <span className={styles.bold}>Chosen: </span>
-                  <p>{r.selectedAnswerText}</p>
-                </div>
-                <div className={styles.answer_div}>
-                  <span className={styles.bold}>Correct: </span>
-                  <p>{r.correctAnswerText}</p>
-                </div>
-              </div>
-            ))}
+        {loading ? (
+          <div className={styles.loader}>
+            <HashLoader color="#f43f5e" size={60} />
+            <p>Please wait</p>
           </div>
-          <div
-            className={`${styles.summary} ${
-              showSummary && styles.summary_visible
-            }`}
-          >
-            <button
-              type="button"
-              onClick={() => setShowSummary((prev) => !prev)}
-              className={`${styles.toggle_summary} ${
-                showSummary && styles.toggled
-              }`}
-            >
-              <FaChevronDown />
-            </button>
-            <h2>Questions:</h2>
-            <div className={styles.results}>
-              {results.map((r, index) => (
+        ) : (
+          <div className={styles.container}>
+            {results.length > 0 ? (
+              <>
+                <div className={styles.questions}>
+                  {results.map((r, index) => (
+                    <div className={styles.question} key={r.questionId}>
+                      <div className={styles.question_div}>
+                        <div className={styles.question_title}>
+                          <div
+                            className={`${styles.icon} ${
+                              r.selectedAnswerNumber === r.correctAnswerNumber
+                                ? styles.icon_correct
+                                : styles.icon_incorrect
+                            }`}
+                          >
+                            {r.correctAnswerNumber ===
+                            r.selectedAnswerNumber ? (
+                              <MdCheck />
+                            ) : (
+                              <MdClose />
+                            )}
+                          </div>
+                          <p className={styles.bold}>Q.No.: {index + 1}</p>
+                        </div>
+                        <div className={styles.question_text}>
+                          <span className={styles.bold}>Question: </span>
+                          <p>{r.questionText}</p>
+                        </div>
+                      </div>
+                      <div className={styles.answer_div}>
+                        <span className={styles.bold}>Chosen: </span>
+                        <p>{r.selectedAnswerText}</p>
+                      </div>
+                      <div className={styles.answer_div}>
+                        <span className={styles.bold}>Correct: </span>
+                        <p>{r.correctAnswerText}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
                 <div
-                  key={`result_icon_${index}`}
-                  className={`${styles.question_result} ${
-                    r.correctAnswerNumber === r.selectedAnswerNumber
-                      ? styles.question_result_correct
-                      : styles.question_result_incorrect
+                  className={`${styles.summary} ${
+                    showSummary && styles.summary_visible
                   }`}
                 >
-                  {index + 1}
+                  <button
+                    type="button"
+                    onClick={() => setShowSummary((prev) => !prev)}
+                    className={`${styles.toggle_summary} ${
+                      showSummary && styles.toggled
+                    }`}
+                  >
+                    <FaChevronDown />
+                  </button>
+                  <h2>Questions:</h2>
+                  <div className={styles.results}>
+                    {results.map((r, index) => (
+                      <div
+                        key={`result_icon_${index}`}
+                        className={`${styles.question_result} ${
+                          r.correctAnswerNumber === r.selectedAnswerNumber
+                            ? styles.question_result_correct
+                            : styles.question_result_incorrect
+                        }`}
+                      >
+                        {index + 1}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+              </>
+            ) : (
+              <p className={styles.error}>
+                You did not submit any question's answer
+              </p>
+            )}
           </div>
-        </div>
+        )}
       </>
     );
 }
