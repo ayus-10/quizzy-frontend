@@ -8,7 +8,7 @@
   min-height: calc(100vh - 70px);
   padding: 36px;
   display: flex;
-  gap: 50px;
+  gap: 20px;
 }
 
 .questions {
@@ -70,25 +70,36 @@
   font-size: 22px;
 }
 
-.summary {
+.details {
   background-color: var(--gray);
   padding: 20px;
   border-radius: 6px;
   width: 300px;
   height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary {
+  background-color: var(--white);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
 }
 
 .results {
-  margin-top: 20px;
-  background-color: var(--white);
-  border-radius: inherit;
-  height: calc(100% - 40px);
-  width: 100%;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
   overflow-y: auto;
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  place-content: start;
+  gap: 10px;
+  background-color: var(--white);
+  padding: 10px;
+  border-radius: 4px;
   color: white;
 }
 
@@ -136,20 +147,20 @@
     flex-direction: column-reverse;
   }
 
-  .summary {
+  .details {
     position: fixed;
     inset: 0;
     transform: translateY(calc(70px - 100%));
-    height: 280px;
+    height: 400px;
     width: 100%;
     transition: var(--default-transition);
   }
 
-  .summary_visible {
+  .details_visible {
     transform: translateY(70px);
   }
 
-  .toggle_summary {
+  .toggle_details {
     position: absolute;
     z-index: 100;
     bottom: -33px;
@@ -165,7 +176,7 @@
     transition: var(--default-transition);
   }
 
-  .toggle_summary:hover {
+  .toggle_details:hover {
     background-color: var(--red-3);
   }
 
@@ -175,7 +186,7 @@
 }
 
 @media screen and (min-width: 481px) {
-  .toggle_summary {
+  .toggle_details {
     display: none;
   }
 }

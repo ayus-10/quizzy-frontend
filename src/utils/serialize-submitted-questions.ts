@@ -8,13 +8,17 @@ export default function serializeSubmittedQuestions(form: HTMLFormElement) {
   const serializedData: AnswerSubmission[] = [];
   answerInputs.forEach((child) => {
     const inputs = (child as HTMLDivElement).getElementsByTagName("input");
-    Array.from(inputs).forEach((input, index) => {
-      if (input.checked) {
-        const questionId = input.getAttribute("name") as string;
-        const selectedAnswerNumber = index + 1;
-        serializedData.push({ questionId, selectedAnswerNumber });
+    const inputsArray = Array.from(inputs);
+    for (let index = 0; index < inputsArray.length; index++) {
+      const questionId = inputsArray[index].getAttribute("name") as string;
+      if (inputsArray[index].checked) {
+        serializedData.push({ questionId, selectedAnswerNumber: index + 1 });
+        break;
       }
-    });
+      if (inputsArray.length === index + 1) {
+        serializedData.push({ questionId, selectedAnswerNumber: 0 });
+      }
+    }
   });
   return serializedData;
 }

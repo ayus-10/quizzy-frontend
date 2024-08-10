@@ -113,11 +113,13 @@
   overflow-y: auto;
   flex-grow: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  place-content: start;
   gap: 10px;
   background-color: var(--white);
   padding: 10px;
   border-radius: 4px;
+  color: white;
 }
 
 .question_progress {
@@ -175,9 +177,5 @@
 
   .toggled svg {
     transform: rotate(90deg);
-  }
-
-  .progress {
-    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
   }
 }

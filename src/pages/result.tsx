@@ -31,7 +31,7 @@ export default function Result() {
 
   const [results, setResults] = useState<QuizSubmissionWithText[]>([]);
 
-  const [showSummary, setShowSummary] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
@@ -92,6 +92,18 @@ export default function Result() {
     getQuizQuestions();
   }, [id]);
 
+  const getTotalCount = () => results.length;
+
+  const getCorrectCount = () =>
+    results.filter((r) => r.correctAnswerNumber === r.selectedAnswerNumber)
+      .length;
+
+  const getUnattemptedCount = () =>
+    results.filter((r) => r.selectedAnswerNumber === 0).length;
+
+  const getIncorrectCount = () =>
+    getTotalCount() - getCorrectCount() - getUnattemptedCount();
+
   if (results)
     return (
       <>
@@ -135,7 +147,11 @@ export default function Result() {
                       </div>
                       <div className={styles.answer_div}>
                         <span className={styles.bold}>Chosen: </span>
-                        <p>{r.selectedAnswerText}</p>
+                        <p>
+                          {r.selectedAnswerNumber === 0
+                            ? "None"
+                            : r.selectedAnswerText}
+                        </p>
                       </div>
                       <div className={styles.answer_div}>
                         <span className={styles.bold}>Correct: </span>
@@ -145,19 +161,26 @@ export default function Result() {
                   ))}
                 </div>
                 <div
-                  className={`${styles.summary} ${
-                    showSummary && styles.summary_visible
+                  className={`${styles.details} ${
+                    showDetails && styles.details_visible
                   }`}
                 >
                   <button
                     type="button"
-                    onClick={() => setShowSummary((prev) => !prev)}
-                    className={`${styles.toggle_summary} ${
-                      showSummary && styles.toggled
+                    onClick={() => setShowDetails((prev) => !prev)}
+                    className={`${styles.toggle_details} ${
+                      showDetails && styles.toggled
                     }`}
                   >
                     <FaChevronDown />
                   </button>
+                  <h2>Summary:</h2>
+                  <div className={styles.summary}>
+                    <span>Questions: {getTotalCount()}</span>
+                    <span>Correct: {getCorrectCount()}</span>
+                    <span>Incorrect: {getIncorrectCount()}</span>
+                    <span>Unattempted: {getUnattemptedCount()}</span>
+                  </div>
                   <h2>Questions:</h2>
                   <div className={styles.results}>
                     {results.map((r, index) => (
