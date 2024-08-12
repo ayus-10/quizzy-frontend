@@ -25,18 +25,18 @@ export default function QuestionInput(props: QuestionInputProps) {
     previousCorrectChoice,
   } = props;
 
-  // This array will be used to map answer choice inputs in the component
+  // This array will be used to render answer choice inputs in the component
   // Each answer choice will be associated with a unique generated ID
   const [choiceIds, setChoiceIds] = useState<string[]>([]);
 
   useEffect(() => {
-    // On initial page load, we are going to generate and save either one or multiple choice ID,
-    // so that appropriate number of answer choices will be mapped in the component
+    // On initial page load, either one or multiple choice ID will be generated and then saved,
+    // so that appropriate number of answer choices will be rendered in the component
     let i = 1;
 
-    // If this we are currently editing previously submitted quiz questions,
-    // we will map answer choice inputs equal to previous count
-    // If new quiz questions are being created, only one choice input will be mapped
+    // In case of editing previously submitted quiz questions, answer choice inputs equal to
+    // previous count will be rendered
+    // If new quiz questions are being created, only one choice input will be rendered
     const maxChoiceCount = previousAnswerChoices?.length ?? 1;
     do {
       saveNewId();

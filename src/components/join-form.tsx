@@ -120,7 +120,7 @@ export default function JoinForm(props: JoinFormProps) {
     try {
       // If the request was successful, join stage will be set to "final" which will display the quiz
       // on the page instead of this component
-      // We will then use a redux slice to save these questions
+      // These questions will then be saved in a redux slice
       // The quiz object will be saved to local storage, in order to auto start quiz if user reloads
       const res = await axios.post<FetchedQuizQuestion[]>(apiUrl, {
         joinToken: quiz.joinToken,

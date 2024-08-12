@@ -55,9 +55,8 @@ export default function Result() {
       questionIds.push(q.questionId)
     );
 
-    // Here in local storage we do have the result data, but we only have questionId,
-    // correctAnswerNumber and selectedAnswerNumber
-    // So, first we gather all the questionIds, get associated QuizQuestion objects from server
+    // Only the questionId, correctAnswerNumber and selectedAnswerNumber are available in local storage
+    // So, gather all the questionIds and get associated QuizQuestion objects from server
     // to extract the question, selectedAnswer and correctAnswer text
     async function getQuizQuestions() {
       const results: QuizSubmissionWithText[] = [];
