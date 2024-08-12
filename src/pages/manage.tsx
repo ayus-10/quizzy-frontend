@@ -79,9 +79,9 @@ export default function Manage() {
     return `${hours} hr, ${minutes} min`;
   }
 
-  function navigateToEdit(id: string, password: string) {
+  function navigateToEdit(id: string) {
     // Set the credentials of quiz to be edited and then navigate to edit page
-    dispatch(setQuizCredentials({ id, password }));
+    dispatch(setQuizCredentials({ id }));
     navigate("/admin/edit");
   }
 
@@ -118,7 +118,7 @@ export default function Manage() {
               <div className={styles.cell}>
                 <button
                   className={styles.action_button}
-                  onClick={() => navigateToEdit(info.id, info.password)}
+                  onClick={() => navigateToEdit(info.id)}
                 >
                   <TbEditCircle />
                   <span>Edit</span>

@@ -2,12 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface QuizCredentials {
   id: string;
-  password: string;
 }
 
 const initialState: QuizCredentials = {
   id: "",
-  password: "",
 };
 
 const quizCredentialsSlice = createSlice({

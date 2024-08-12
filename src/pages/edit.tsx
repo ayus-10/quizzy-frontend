@@ -37,9 +37,10 @@ export default function Edit() {
   useEffect(() => {
     async function fetchQuestions() {
       const id = credentials.id;
-      const password = credentials.password;
       try {
-        const questions = await getQuizQuestions(id, password);
+        const res = await getQuizQuestions(id);
+
+        const questions = res?.data.quiz as QuizQuestion[];
 
         // Adding the ID property as the fetched quiz questions are not going to have it
         const questionsWithIds: QuizQuestionWithId[] = questions.map((q) => ({
@@ -80,7 +81,7 @@ export default function Edit() {
   }
 
   function cancelEdit() {
-    dispatch(setQuizCredentials({ id: "", password: "" }));
+    dispatch(setQuizCredentials({ id: "" }));
     navigate("/admin");
   }
 

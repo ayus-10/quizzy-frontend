@@ -1,14 +1,11 @@
 import axios from "axios";
 import { BASE_API_URL } from "../config";
-import { QuizQuestion } from "../interfaces/quiz-question.interface";
+import handleQuizRequests from "./handle-quiz-requests";
 
-type FetchedQuizQuestions = {
-  quiz: QuizQuestion[];
-};
+export default async function getQuizQuestions(id: string) {
+  const apiUrl = `${BASE_API_URL}/quiz/questions?id=${id}`;
 
-export default async function getQuizQuestions(id: string, password: string) {
-  const apiUrl = `${BASE_API_URL}/quiz/questions?id=${id}&password=${password}`;
+  const getQuizQuestionsRequest = () => axios.get(apiUrl);
 
-  const res = await axios.get<FetchedQuizQuestions>(apiUrl);
-  return res.data.quiz;
+  return await handleQuizRequests(getQuizQuestionsRequest);
 }
