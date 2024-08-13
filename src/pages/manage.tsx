@@ -8,7 +8,7 @@ import { useAppDispatch } from "../redux/hooks";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
 import { useNavigate } from "react-router-dom";
 import deleteQuiz from "../utils/delete-quiz";
-import { setQuizCredentials } from "../redux/slices/quiz-credentials.slice";
+import { GoChecklist } from "react-icons/go";
 
 export default function Manage() {
   const [allQuizInfo, setAllQuizInfo] = useState<FetchedQuizInfo[]>([]);
@@ -80,9 +80,11 @@ export default function Manage() {
   }
 
   function navigateToEdit(id: string) {
-    // Set the credentials of quiz to be edited and then navigate to edit page
-    dispatch(setQuizCredentials({ id }));
-    navigate("/admin/edit");
+    navigate(`/admin/edit?id=${id}`);
+  }
+
+  function navigateToResult(id: string) {
+    navigate(`/admin/result?id=${id}`);
   }
 
   return (
@@ -129,6 +131,13 @@ export default function Manage() {
                 >
                   <HiOutlineTrash />
                   <span>Delete</span>
+                </button>
+                <button
+                  className={styles.action_button}
+                  onClick={() => navigateToResult(info.id)}
+                >
+                  <GoChecklist />
+                  <span>Result</span>
                 </button>
               </div>
             </Fragment>

@@ -8,8 +8,7 @@ import Button from "../components/button";
 import { BeatLoader, HashLoader } from "react-spinners";
 import { v4 as uuid } from "uuid";
 import { serializeQuizQuestions } from "../utils/serialize-quiz-questions";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setQuizCredentials } from "../redux/slices/quiz-credentials.slice";
+import { useAppDispatch } from "../redux/hooks";
 import { CiWarning } from "react-icons/ci";
 import updateQuizQuestions from "../utils/update-quiz-questions";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
@@ -20,7 +19,7 @@ interface QuizQuestionWithId extends QuizQuestion {
 }
 
 export default function Edit() {
-  const credentials = useAppSelector((state) => state.quizCredentials);
+  const [quizId] = useState(() => getQuizIdFromUrl());
 
   const [fetchedQuizQuestions, setFetchedQuizQuestions] = useState<
     QuizQuestionWithId[]
@@ -36,9 +35,8 @@ export default function Edit() {
 
   useEffect(() => {
     async function fetchQuestions() {
-      const id = credentials.id;
       try {
-        const res = await getQuizQuestions(id);
+        const res = await getQuizQuestions(quizId);
 
         const questions = res?.data.quiz as QuizQuestion[];
 
@@ -48,8 +46,6 @@ export default function Edit() {
           id: uuid(),
         }));
         setFetchedQuizQuestions(questionsWithIds);
-      } catch (err) {
-        navigate("/admin");
       } finally {
         setLoading(false);
       }
@@ -58,7 +54,12 @@ export default function Edit() {
     setLoading(true);
 
     fetchQuestions();
-  }, [credentials]);
+  }, [quizId]);
+
+  function getQuizIdFromUrl() {
+    const urlQuery = new URLSearchParams(location.search);
+    return String(urlQuery.get("id"));
+  }
 
   function removeQuestion(idToBeRemoved: string) {
     if (fetchedQuizQuestions.length <= 2) {
@@ -81,8 +82,7 @@ export default function Edit() {
   }
 
   function cancelEdit() {
-    dispatch(setQuizCredentials({ id: "" }));
-    navigate("/admin");
+    navigate("/admin/manage");
   }
 
   async function handleFormSubmit(e: FormEvent) {
@@ -98,7 +98,7 @@ export default function Edit() {
       serializeQuizQuestions(questionInputs);
 
     try {
-      const res = await updateQuizQuestions(credentials.id, quizQuestions);
+      const res = await updateQuizQuestions(quizId, quizQuestions);
       dispatch(setAlertMessage({ message: res?.data, status: "success" }));
       cancelEdit();
     } catch (err) {
@@ -154,7 +154,7 @@ export default function Edit() {
         <p>
           {loading
             ? "Loading quiz data, please wait"
-            : "Please delete the quiz if it's empty"}
+            : "No data available for editing"}
         </p>
       </div>
     );

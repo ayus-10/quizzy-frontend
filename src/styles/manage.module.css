@@ -65,8 +65,8 @@
   cursor: pointer;
 }
 
-.action_button:nth-child(odd) {
-  padding-bottom: 10px;
+.action_button:nth-child(even) {
+  padding: 10px 0;
 }
 
 .action_button:hover,
