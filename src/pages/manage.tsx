@@ -1,6 +1,7 @@
 import { useEffect, useState, Fragment } from "react";
 import getAllQuizInfo from "../utils/get-all-quiz-info";
 import styles from "../styles/manage.module.css";
+import commonStyles from "../styles/common-styles.module.css";
 import { FetchedQuizInfo } from "../interfaces/fetched-quiz-info.interface";
 import { TbEditCircle } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi2";
@@ -84,7 +85,7 @@ export default function Manage() {
   }
 
   function navigateToResult(id: string) {
-    navigate(`/admin/result?id=${id}`);
+    navigate(`/admin/results?id=${id}`);
   }
 
   return (
@@ -92,48 +93,54 @@ export default function Manage() {
       <h1 className={styles.title}>Manage Quizzes</h1>
       <input
         type="text"
-        className={styles.search_input}
+        className={commonStyles.search_input}
         placeholder="Search by title..."
         onChange={(e) => setSearch(e.target.value)}
       />
-      <div className={styles.grid_wrapper}>
-        <div className={styles.grid_body}>
-          <div className={styles.heading_cell}>S.N.</div>
-          <div className={styles.heading_cell}>Title</div>
-          <div className={styles.heading_cell}>ID</div>
-          <div className={styles.heading_cell}>Password</div>
-          <div className={styles.heading_cell}>Starts</div>
-          <div className={styles.heading_cell}>Ends</div>
-          <div className={styles.heading_cell}>Duration</div>
-          <div className={styles.heading_cell}>Action</div>
+      <div className={commonStyles.grid_wrapper}>
+        <div
+          className={`${commonStyles.grid_body} ${commonStyles.eight_columns}`}
+        >
+          <div className={commonStyles.heading_cell}>S.N.</div>
+          <div className={commonStyles.heading_cell}>Title</div>
+          <div className={commonStyles.heading_cell}>ID</div>
+          <div className={commonStyles.heading_cell}>Password</div>
+          <div className={commonStyles.heading_cell}>Starts</div>
+          <div className={commonStyles.heading_cell}>Ends</div>
+          <div className={commonStyles.heading_cell}>Duration</div>
+          <div className={commonStyles.heading_cell}>Action</div>
           {filteredQuizInfo.map((info, index) => (
             <Fragment key={info.id}>
-              <div className={styles.cell}>{index + 1}</div>
-              <div className={styles.cell}>{info.title}</div>
-              <div className={styles.cell}>{info.id}</div>
-              <div className={styles.cell}>{info.password}</div>
-              <div className={styles.cell}>{formattedTime(info.startTime)}</div>
-              <div className={styles.cell}>{formattedTime(info.endTime)}</div>
-              <div className={styles.cell}>
+              <div className={commonStyles.cell}>{index + 1}</div>
+              <div className={commonStyles.cell}>{info.title}</div>
+              <div className={commonStyles.cell}>{info.id}</div>
+              <div className={commonStyles.cell}>{info.password}</div>
+              <div className={commonStyles.cell}>
+                {formattedTime(info.startTime)}
+              </div>
+              <div className={commonStyles.cell}>
+                {formattedTime(info.endTime)}
+              </div>
+              <div className={commonStyles.cell}>
                 {durationBetween(info.startTime, info.endTime)}
               </div>
-              <div className={styles.cell}>
+              <div className={commonStyles.cell}>
                 <button
-                  className={styles.action_button}
+                  className={commonStyles.action_button}
                   onClick={() => navigateToEdit(info.id)}
                 >
                   <TbEditCircle />
                   <span>Edit</span>
                 </button>
                 <button
-                  className={styles.action_button}
+                  className={commonStyles.action_button}
                   onClick={() => handleQuizDeletion(info.id)}
                 >
                   <HiOutlineTrash />
                   <span>Delete</span>
                 </button>
                 <button
-                  className={styles.action_button}
+                  className={commonStyles.action_button}
                   onClick={() => navigateToResult(info.id)}
                 >
                   <GoChecklist />

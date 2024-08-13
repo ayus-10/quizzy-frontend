@@ -13,6 +13,7 @@ import { CiWarning } from "react-icons/ci";
 import updateQuizQuestions from "../utils/update-quiz-questions";
 import { setAlertMessage } from "../redux/slices/alert-message.slice";
 import axios from "axios";
+import { getQuizIdFromUrl } from "../utils/get-quiz-id-from-url";
 
 interface QuizQuestionWithId extends QuizQuestion {
   id: string;
@@ -55,11 +56,6 @@ export default function Edit() {
 
     fetchQuestions();
   }, [quizId]);
-
-  function getQuizIdFromUrl() {
-    const urlQuery = new URLSearchParams(location.search);
-    return String(urlQuery.get("id"));
-  }
 
   function removeQuestion(idToBeRemoved: string) {
     if (fetchedQuizQuestions.length <= 2) {

@@ -25,7 +25,7 @@ export default function AdminSidebar(props: AdminSidebarProps) {
   const navLinks = [
     { title: "create", path: "/admin/create" },
     { title: "manage", path: "/admin/manage" },
-    { title: "result", path: "/admin/result" },
+    { title: "results", path: "/admin/results" },
     { title: "edit", path: "/admin/edit" },
   ];
 
