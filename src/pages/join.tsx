@@ -47,7 +47,7 @@ export default function Join() {
   useEffect(() => {
     // IDs of submitted quiz will be stored in a redux slice so that instead of "Start"
     // "Result" button can be displayed by "saved-quiz-card.tsx" component
-    const submittedQuizzesString = localStorage.getItem("RESULTS");
+    const submittedQuizzesString = localStorage.getItem("RESULT_DATA");
 
     const submittedQuizzes = JSON.parse(
       submittedQuizzesString as string
@@ -121,18 +121,20 @@ export default function Join() {
         submittedQuestions,
       });
 
-      const result = res.data.result as QuizSubmission;
+      const { quizId, submittedBy } = res.data;
 
-      const prevResultString = localStorage.getItem("RESULTS");
+      const result: QuizSubmission = { quizId, submittedBy };
+
+      const prevResultString = localStorage.getItem("RESULT_DATA");
       if (!prevResultString) {
-        localStorage.setItem("RESULTS", JSON.stringify([result]));
+        localStorage.setItem("RESULT_DATA", JSON.stringify([result]));
       } else {
         const prevResult = JSON.parse(
           prevResultString as string
         ) as QuizSubmission[];
 
         localStorage.setItem(
-          "RESULTS",
+          "RESULT_DATA",
           JSON.stringify([...prevResult, result])
         );
       }

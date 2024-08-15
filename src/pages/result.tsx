@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-import {
-  QuizSubmission,
-  SubmittedQuestion,
-} from "../interfaces/quiz-submission.interface";
 import { useParams } from "react-router-dom";
 import Nav from "../components/nav";
 import styles from "../styles/result.module.css";
@@ -11,84 +7,43 @@ import { BASE_API_URL } from "../config";
 import axios from "axios";
 import { FaChevronDown } from "react-icons/fa";
 import { HashLoader } from "react-spinners";
+import { QuizSubmission } from "../interfaces/quiz-submission.interface";
 
-interface QuizSubmissionWithText extends SubmittedQuestion {
+interface QuizResult {
+  questionId: string;
+  selectedAnswerNumber: number;
+  correctAnswerNumber: number;
   questionText: string;
   selectedAnswerText: string;
   correctAnswerText: string;
 }
 
-interface QuizQuestion {
-  _id: string;
-  quizId: string;
-  question: string;
-  answerChoices: string[];
-  correctChoice: number;
-}
-
 export default function Result() {
   const { id } = useParams();
 
-  const [results, setResults] = useState<QuizSubmissionWithText[]>([]);
+  const [results, setResults] = useState<QuizResult[]>([]);
 
   const [showDetails, setShowDetails] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const submittedQuestionsString = localStorage.getItem("RESULTS");
-    if (!submittedQuestionsString) {
-      return;
-    }
+    async function getResult() {
+      const resultDataString = localStorage.getItem("RESULT_DATA");
+      const resultData = resultDataString
+        ? (JSON.parse(resultDataString) as QuizSubmission[])
+        : [];
 
-    const submittedQuestions = JSON.parse(
-      submittedQuestionsString
-    ) as QuizSubmission[];
+      const currentResultData = resultData.find((rd) => rd.quizId === id);
+      const fullname = currentResultData?.submittedBy;
 
-    const currentResult = submittedQuestions.find((r) => r.quizId === id);
-    if (!currentResult) {
-      return;
-    }
+      const apiUrl = `${BASE_API_URL}/join/result?id=${id}&fullname=${fullname}`;
+      const { data } = await axios.get(apiUrl);
+      setResults(data.results);
 
-    const questionIds: string[] = [];
-    currentResult.submittedQuestions.forEach((q) =>
-      questionIds.push(q.questionId)
-    );
-
-    // Only the questionId, correctAnswerNumber and selectedAnswerNumber are available in local storage
-    // So, gather all the questionIds and get associated QuizQuestion objects from server
-    // to extract the question, selectedAnswer and correctAnswer text
-    async function getQuizQuestions() {
-      const results: QuizSubmissionWithText[] = [];
-
-      const apiUrl = `${BASE_API_URL}/quiz/questions/${currentResult?.quizId}`;
-
-      const quizQuestions = (await axios.post(apiUrl, { questionIds }))
-        .data as QuizQuestion[];
-
-      currentResult?.submittedQuestions.forEach((sq) => {
-        const currentQuizQuestion = quizQuestions.find(
-          (qq) => qq._id === sq.questionId
-        );
-
-        results.push({
-          correctAnswerNumber: sq.correctAnswerNumber,
-          selectedAnswerNumber: sq.selectedAnswerNumber,
-          questionId: sq.questionId,
-          questionText: String(currentQuizQuestion?.question),
-          correctAnswerText: String(
-            currentQuizQuestion?.answerChoices[sq.correctAnswerNumber - 1]
-          ),
-          selectedAnswerText: String(
-            currentQuizQuestion?.answerChoices[sq.selectedAnswerNumber - 1]
-          ),
-        });
-      });
-
-      setResults(results);
       setLoading(false);
     }
-    getQuizQuestions();
+    getResult();
   }, [id]);
 
   const getTotalCount = () => results.length;
@@ -198,9 +153,7 @@ export default function Result() {
                 </div>
               </>
             ) : (
-              <p className={styles.error}>
-                You did not submit any question's answer
-              </p>
+              <p className={styles.error}>Unable to load the result!</p>
             )}
           </div>
         )}
