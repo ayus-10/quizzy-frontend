@@ -1,9 +1,10 @@
-import { Dispatch, FormEvent, SetStateAction, useRef } from "react";
+import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
 import Button from "./button";
 import styles from "../styles/auth-form.module.css";
 import commonStyles from "../styles/common-styles.module.css";
 import { Link } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type FormAction = "login" | "register";
 
@@ -19,6 +20,8 @@ export default function AuthForm(props: AuthFormProps) {
 
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -40,25 +43,36 @@ export default function AuthForm(props: AuthFormProps) {
         <WelcomeText formType={action} />
       </div>
       <form onSubmit={(e) => handleSubmit(e)} className={styles.form}>
-        <div className={commonStyles.input_div}>
+        <div className={styles.input_wrapper}>
           <label htmlFor="email">Email</label>
-          <input
-            ref={emailInput}
-            type="email"
-            placeholder="Your email"
-            id="email"
-            className={commonStyles.input}
-          />
+          <div className={commonStyles.input_div}>
+            <input
+              ref={emailInput}
+              type="email"
+              placeholder="Your email"
+              id="email"
+              className={commonStyles.input}
+            />
+          </div>
         </div>
-        <div className={commonStyles.input_div}>
+        <div className={styles.input_wrapper}>
           <label htmlFor="password">Password</label>
-          <input
-            ref={passwordInput}
-            type="password"
-            placeholder="Password"
-            id="password"
-            className={commonStyles.input}
-          />
+          <div className={commonStyles.input_div}>
+            <input
+              ref={passwordInput}
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              id="password"
+              className={commonStyles.input}
+            />
+            <button
+              className={commonStyles.toggle_password}
+              onClick={() => setShowPassword((prev) => !prev)}
+              type="button"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
         </div>
         <div className={commonStyles.center}>
           {loading ? (

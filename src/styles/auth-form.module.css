@@ -25,6 +25,12 @@
   box-shadow: 0 0 1px 1px var(--gray-dark);
 }
 
+.input_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 @media screen and (max-width: 480px) {
   .auth_form {
     align-content: center;

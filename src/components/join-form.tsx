@@ -19,6 +19,7 @@ import { JoinedQuiz } from "../interfaces/joined-quiz.interface";
 import { JoinStage } from "../pages/join";
 import { setQuizQuestions } from "../redux/slices/quiz-questions.slice";
 import { FetchedQuizQuestion } from "../interfaces/fetched-quiz-question.interface";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type JoinFormProps = {
   setStage: Dispatch<SetStateAction<JoinStage>>;
@@ -30,6 +31,8 @@ export default function JoinForm(props: JoinFormProps) {
   const fullnameInput = useRef<HTMLInputElement>(null);
   const quizIdInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -168,11 +171,18 @@ export default function JoinForm(props: JoinFormProps) {
         <div className={commonStyles.input_div}>
           <input
             ref={passwordInput}
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             id="password"
             className={commonStyles.input}
           />
+          <button
+            className={commonStyles.toggle_password}
+            onClick={() => setShowPassword((prev) => !prev)}
+            type="button"
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
         </div>
         <div className={commonStyles.center}>
           {loading ? (
